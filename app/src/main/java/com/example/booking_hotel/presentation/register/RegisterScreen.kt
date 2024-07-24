@@ -1,43 +1,63 @@
 package com.example.booking_hotel.presentation.register
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booking_hotel.R
-import com.example.booking_hotel.presentation.navgraph.Route
+import com.example.booking_hotel.presentation.register.components.InputText
+import com.example.booking_hotel.ui.theme.Background
 import com.example.booking_hotel.ui.theme.TextColor
 
 @Composable
 fun RegisterScreen(
+    viewModel: RegisterViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
+
+    val email by viewModel.email
+    val contact by viewModel.contact
+    val password by viewModel.password
+    val confirmPassword by viewModel.confirmPassword
+
     Box(
         modifier = modifier
     ) {
         Image(
             painter = painterResource(id = R.drawable.background_register_screen),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
         )
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 33.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -49,6 +69,75 @@ fun RegisterScreen(
                 )
             )
             Spacer(modifier = Modifier.height(32.dp))
+            InputText(
+                text = email,
+                onValueChange = { viewModel.onEmailChange(it) },
+                placeHolder = "Email",
+                isPassword = false
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            InputText(
+                text = contact,
+                onValueChange = { viewModel.onContactChange(it) },
+                placeHolder = "SDT",
+                isPassword = false
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            InputText(
+                text = password,
+                onValueChange = { viewModel.onPasswordChange(it) },
+                placeHolder = "Mật khẩu",
+                isPassword = true
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            InputText(
+                text = confirmPassword,
+                onValueChange = { viewModel.onConfirmPasswordChange(it) },
+                placeHolder = "Xác nhận mật khẩu",
+                isPassword = true
+            )
+            Spacer(modifier = Modifier.height(90.dp))
+            TextButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Background, RoundedCornerShape(4.dp)
+                    )
+                    .padding(vertical = 9.dp)
+
+            ) {
+                Text(
+                    text = "Đăng ký", style = TextStyle(
+                        fontSize = 20.sp,
+                        fontFamily = FontFamily(Font(R.font.lato_regular)),
+                        color = Color.White
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Bạn đã có tài khoản?", style = TextStyle(
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.lato_regular)),
+                        color = Color(0xFF2C3922)
+                    )
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    text = "Đăng nhập", style = TextStyle(
+                        fontSize = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.lato_regular)),
+                        color = Color(0xFF986601)
+                    )
+                )
+            }
         }
     }
 }

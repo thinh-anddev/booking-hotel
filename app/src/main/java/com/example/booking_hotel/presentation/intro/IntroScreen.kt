@@ -95,7 +95,9 @@ fun IntroScreen(
                     modifier = Modifier.clickable {
                         scope.launch {
                             if (pageState.currentPage == 2) {
-                                navController.navigate(Route.RegisterScreen.route)
+                                navController.navigate(Route.RegisterScreen.route) {
+                                    popUpTo(Route.IntroScreen.route) {inclusive = true}
+                                }
                             } else {
                                 pageState.animateScrollToPage(page = pageState.currentPage + 1)
                             }
