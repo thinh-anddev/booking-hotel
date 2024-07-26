@@ -28,7 +28,8 @@ fun InputText(
     onClick: (() -> Unit)? = null,
     onValueChange: (String) -> Unit,
     placeHolder: String,
-    isPassword: Boolean
+    isPassword: Boolean,
+    hasError: Boolean
 ) {
     val interactionSource = remember {
         MutableInteractionSource()
@@ -41,6 +42,8 @@ fun InputText(
         }
     }
 
+    val backgroundBorder = if (hasError) Color.Red else Color(0xFF757575)
+
     Box(
         modifier = modifier
     ) {
@@ -49,7 +52,7 @@ fun InputText(
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
-                    color = Color(0xFF757575),
+                    color = backgroundBorder,
                     shape = RoundedCornerShape(4.dp)
                 ),
             value = text,

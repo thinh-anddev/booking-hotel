@@ -6,7 +6,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.booking_hotel.presentation.home.HomeScreen
 import com.example.booking_hotel.presentation.intro.IntroScreen
+import com.example.booking_hotel.presentation.login.LoginScreen
 import com.example.booking_hotel.presentation.register.RegisterScreen
 import com.example.booking_hotel.presentation.splash.SplashScreen
 import com.example.booking_hotel.presentation.splash.SplashViewModel
@@ -32,7 +34,17 @@ fun NavGraph(
         composable(
             route = Route.RegisterScreen.route
         ) {
-            RegisterScreen()
+            RegisterScreen(navController = navController)
+        }
+        composable(
+            route = Route.LoginScreen.route
+        ) {
+            LoginScreen(navController = navController)
+        }
+        composable(
+            route = Route.HomeScreen.route
+        ) {
+            HomeScreen()
         }
     }
 }

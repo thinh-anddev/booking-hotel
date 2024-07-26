@@ -4,7 +4,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +24,9 @@ class RegisterViewModel @Inject constructor() : ViewModel(){
     private val _confirmPassword = mutableStateOf("")
     val confirmPassword: State<String> = _confirmPassword
 
+    private val _errorMessage = mutableStateOf("")
+    val errorMessage: State<String> = _errorMessage
+
     fun onEmailChange(email: String) {
         _email.value = email
     }
@@ -36,5 +41,17 @@ class RegisterViewModel @Inject constructor() : ViewModel(){
 
     fun onConfirmPasswordChange(confirmnPassword: String) {
         _confirmPassword.value = confirmnPassword
+    }
+
+    fun register() {
+        viewModelScope.launch {
+            if (_email.value.isBlank() || _contact.value.isBlank() || _password.value.isBlank() || _confirmPassword.value.isBlank()) {
+                _errorMessage.value = "Vui lòng nhập đầy đủ thông tin"
+            } else if (_password.value != _confirmPassword.value) {
+                _errorMessage.value = "Mật khẩu không trùng khớp"
+            } else if (_password.value.length <= 8 ) {
+                _errorMessage.value = "Hãy nhập mật khẩu dài hơn"
+            }
+        }
     }
 }

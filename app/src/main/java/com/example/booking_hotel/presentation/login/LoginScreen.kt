@@ -1,9 +1,8 @@
-package com.example.booking_hotel.presentation.register
+package com.example.booking_hotel.presentation.login
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,8 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.InspectableModifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -40,36 +39,41 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
+import com.example.booking_hotel.helper.ToastText
+import com.example.booking_hotel.helper.showToast
+import com.example.booking_hotel.presentation.login.components.ButtonOtherLogin
 import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.presentation.register.components.InputText
 import com.example.booking_hotel.ui.theme.Background
 import com.example.booking_hotel.ui.theme.TextColor
 
 @Composable
-fun RegisterScreen(
-    viewModel: RegisterViewModel = hiltViewModel(),
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-
     val email by viewModel.email
-    val contact by viewModel.contact
     val password by viewModel.password
-    val confirmPassword by viewModel.confirmPassword
+    val loginSuccess by viewModel.loginSuccess
     val errorMessage by viewModel.errorMessage
 
     var showErrors by remember { mutableStateOf(false) }
-
     val errorEmail = showErrors && email.isBlank()
-    val errorContact = showErrors && contact.isBlank()
     val errorPassword = showErrors && password.isBlank()
-    val errorConfirm = showErrors && confirmPassword.isBlank()
 
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = errorMessage) {
+    LaunchedEffect(key1 = loginSuccess, key2 = errorMessage) {
+        if (loginSuccess) {
+            navController.navigate(Route.HomeScreen.route) {
+                popUpTo(Route.LoginScreen.route) { inclusive = true }
+            }
+            viewModel.loginSuccess.value = false
+        }
+
         if (errorMessage.isNotEmpty()) {
-            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            errorMessage.showToast(context = context)
         }
     }
 
@@ -89,13 +93,13 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Đăng ký".uppercase(), style = TextStyle(
+                text = "đăng nhập".uppercase(), style = TextStyle(
                     color = TextColor,
                     fontSize = 24.sp,
                     fontFamily = FontFamily(Font(R.font.lato_bold)),
                 )
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(45.dp))
             InputText(
                 text = email,
                 onValueChange = { viewModel.onEmailChange(it) },
@@ -105,33 +109,30 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             InputText(
-                text = contact,
-                onValueChange = { viewModel.onContactChange(it) },
-                placeHolder = "SDT",
-                isPassword = false,
-                hasError = errorContact
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            InputText(
                 text = password,
                 onValueChange = { viewModel.onPasswordChange(it) },
-                placeHolder = "Mật khẩu",
+                placeHolder = "Password",
                 isPassword = true,
                 hasError = errorPassword
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            InputText(
-                text = confirmPassword,
-                onValueChange = { viewModel.onConfirmPasswordChange(it) },
-                placeHolder = "Xác nhận mật khẩu",
-                isPassword = true,
-                hasError = errorConfirm
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Quên mật khẩu?", style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.lato_regular)),
+                    color = Color(0xFF2C3922)
+                ),
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .clickable {
+                        ToastText.PENDING_FUNCTION.showToast(context)
+                    }
             )
-            Spacer(modifier = Modifier.height(90.dp))
+            Spacer(modifier = Modifier.height(35.dp))
             TextButton(
                 onClick = {
                     showErrors = true
-                    viewModel.register()
+                    viewModel.login()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,14 +143,36 @@ fun RegisterScreen(
 
             ) {
                 Text(
-                    text = "Đăng ký", style = TextStyle(
+                    text = "Đăng nhập", style = TextStyle(
                         fontSize = 20.sp,
                         fontFamily = FontFamily(Font(R.font.lato_regular)),
                         color = Color.White
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(11.dp))
+            Text(
+                text = "Hoặc", style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.lato_regular)),
+                    color = Color(0xFF2C3922)
+                )
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+            ButtonOtherLogin(
+                methodImage = R.drawable.ic_facebook,
+                onClick = {
+                    ToastText.PENDING_FUNCTION.showToast(context)
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            ButtonOtherLogin(
+                methodImage = R.drawable.ic_gmail,
+                onClick = {
+                    ToastText.PENDING_FUNCTION.showToast(context)
+                }
+            )
+            Spacer(modifier = Modifier.height(75.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -165,15 +188,15 @@ fun RegisterScreen(
                 )
                 Spacer(modifier = Modifier.width(2.dp))
                 Text(
-                    text = "Đăng nhập",
+                    text = "Đăng ký",
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.lato_regular)),
                         color = Color(0xFF986601)
                     ),
                     modifier = Modifier.clickable {
-                        navController.navigate(Route.LoginScreen.route) {
-                            popUpTo(Route.RegisterScreen.route) {inclusive = false}
+                        navController.navigate(Route.RegisterScreen.route) {
+                            popUpTo(Route.LoginScreen.route) { inclusive = false }
                         }
                     }
                 )
@@ -184,7 +207,7 @@ fun RegisterScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterScreenprevuew() {
+fun LoginScreenP() {
     val navController = rememberNavController()
-    RegisterScreen(navController = navController)
+    LoginScreen(navController = navController)
 }
