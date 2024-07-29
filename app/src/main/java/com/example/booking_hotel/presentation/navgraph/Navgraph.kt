@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.presentation.home.HomeScreen
 import com.example.booking_hotel.presentation.intro.IntroScreen
 import com.example.booking_hotel.presentation.login.LoginScreen
+import com.example.booking_hotel.presentation.navigator.NavigatorScreen
 import com.example.booking_hotel.presentation.register.RegisterScreen
 import com.example.booking_hotel.presentation.splash.SplashScreen
 import com.example.booking_hotel.presentation.splash.SplashViewModel
@@ -42,9 +43,9 @@ fun NavGraph(
             LoginScreen(navController = navController)
         }
         composable(
-            route = Route.HomeScreen.route
+            route = Route.NavigatorScreen.route
         ) {
-            HomeScreen()
+            NavigatorScreen()
         }
     }
 }

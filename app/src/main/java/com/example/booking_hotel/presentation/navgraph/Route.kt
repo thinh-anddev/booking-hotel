@@ -8,4 +8,8 @@ sealed class Route(
     data object RegisterScreen : Route("RegisterScreen")
     data object LoginScreen : Route("LoginScreen")
     data object HomeScreen : Route("HomeScreen")
+    data object ExploreScreen : Route("ExploreScreen")
+    data object OrderScreen : Route("OrderScreen")
+    data object AccountScreen : Route("AccountScreen")
+    data object NavigatorScreen : Route("NavigatorScreen")
 }

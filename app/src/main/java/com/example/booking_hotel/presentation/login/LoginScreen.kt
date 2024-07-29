@@ -66,7 +66,7 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = loginSuccess, key2 = errorMessage) {
         if (loginSuccess) {
-            navController.navigate(Route.HomeScreen.route) {
+            navController.navigate(Route.NavigatorScreen.route) {
                 popUpTo(Route.LoginScreen.route) { inclusive = true }
             }
             viewModel.loginSuccess.value = false
@@ -180,7 +180,7 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Bạn đã có tài khoản?", style = TextStyle(
+                    text = "Bạn chưa có tài khoản?", style = TextStyle(
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.lato_regular)),
                         color = Color(0xFF2C3922)
