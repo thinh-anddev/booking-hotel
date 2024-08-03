@@ -5,12 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -31,16 +35,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.booking_hotel.R
+import com.example.booking_hotel.presentation.home.components.CheckWidget
+import com.example.booking_hotel.presentation.home.components.NumberPeopleWidget
+import com.example.booking_hotel.presentation.home.components.SearchBar
+import com.example.booking_hotel.presentation.home.components.SearchButton
+import com.example.booking_hotel.presentation.navgraph.Route
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavController,
+    modifier: Modifier = Modifier
 ) {
-    val searchResult by viewModel.searchResult.collectAsState()
-    val properties = searchResult.collectAsLazyPagingItems()
+    val searchQuery by viewModel.searchQuery
+    val children by viewModel.children
+    val adult by viewModel.adult
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -52,6 +66,7 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
                 .statusBarsPadding()
                 .navigationBarsPadding()
+                .padding(horizontal = 16.dp)
         ) {
             ConstraintLayout(
                 modifier = Modifier
@@ -97,31 +112,48 @@ fun HomeScreen(
                     }
                 )
             }
-        }
-    }
-    Column(
-        modifier = Modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-//        LazyColumn {
-//            items(properties.itemCount) {
-//                index ->
-//                val property = properties[index]
-//                property?.let {
-//                    Text(text = it.name)
-//                }
-//            }
-//        }
-        Text(text =  "hehe ${properties.itemCount}")
-        TextButton(onClick = { viewModel.search() }) {
-            Text(text = "search")
+            Spacer(modifier = Modifier.height(30.dp))
+            SearchBar(
+                text = searchQuery,
+                placeHolder = "Da lat, Lam Dong",
+                onValueChange = { viewModel.onSearchChange(it) },
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                CheckWidget(check = "Check-in", date = "asdfasd", modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(20.dp))
+                CheckWidget(check = "Check-out", date = "asdfasd", modifier = Modifier.weight(1f))
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            NumberPeopleWidget(
+                adults = adult.toString(),
+                childrens = children.toString(),
+                plusAdult = { viewModel.countAdult(true) },
+                plusChildren = { viewModel.countChildren(true) },
+                minusAdult = { viewModel.countAdult(false) },
+                minusChildren = { viewModel.countChildren(false) }
+            )
+            Spacer(modifier = Modifier.height(22.dp))
+            SearchButton(onClick = {
+                navController.navigate(
+                    route = Route.SearchScreen.passData(
+                        searchQuery = searchQuery,
+                        checkInDate = "2024-08-03",
+                        checkOutDate = "2024-08-04",
+                        children = children.toString(),
+                        adult = adult.toString()
+                    )
+                )
+            })
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    HomeScreen()
+//}

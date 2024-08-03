@@ -12,4 +12,15 @@ sealed class Route(
     data object OrderScreen : Route("OrderScreen")
     data object AccountScreen : Route("AccountScreen")
     data object NavigatorScreen : Route("NavigatorScreen")
+    data object SearchScreen : Route("SearchScreen/{searchQuery}/{checkInDate}/{checkOutDate}/{adult}/{children}") {
+        fun passData(
+            searchQuery: String,
+            checkInDate: String,
+            checkOutDate: String,
+            adult: String,
+            children: String,
+        ): String {
+            return "SearchScreen/$searchQuery/$checkInDate/$checkOutDate/$adult/$children"
+        }
+    }
 }

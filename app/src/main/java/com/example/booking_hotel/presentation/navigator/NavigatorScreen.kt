@@ -11,10 +11,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.booking_hotel.R
 import com.example.booking_hotel.presentation.account.AccountScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
@@ -23,6 +25,7 @@ import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.presentation.navigator.components.BottomNavigator
 import com.example.booking_hotel.presentation.navigator.components.BottomNavigatorItem
 import com.example.booking_hotel.presentation.ordered.OrderScreen
+import com.example.booking_hotel.presentation.search.SearchScreen
 
 @Composable
 fun NavigatorScreen(
@@ -107,7 +110,7 @@ fun NavigatorScreen(
             composable(
                 route = Route.HomeScreen.route
             ) {
-                HomeScreen()
+                HomeScreen(navController = navController)
             }
             composable(
                 route = Route.ExploreScreen.route
@@ -123,6 +126,45 @@ fun NavigatorScreen(
                 route = Route.AccountScreen.route
             ) {
                 AccountScreen()
+            }
+            composable(
+                route = Route.NavigatorScreen.route
+            ) {
+                NavigatorScreen()
+            }
+            composable(
+                route = Route.SearchScreen.route,
+                arguments = listOf(
+                    navArgument("searchQuery") {
+                        type = NavType.StringType
+                    },
+                    navArgument("checkInDate") {
+                        type = NavType.StringType
+                    },
+                    navArgument("checkOutDate") {
+                        type = NavType.StringType
+                    },
+                    navArgument("adult") {
+                        type = NavType.StringType
+                    },
+                    navArgument("children") {
+                        type = NavType.StringType
+                    }
+                )
+            ) { backStackEntry ->
+                val searchQuery = backStackEntry.arguments?.getString("searchQuery").toString()
+                val checkInDate = backStackEntry.arguments?.getString("checkInDate").toString()
+                val checkOutDate = backStackEntry.arguments?.getString("checkOutDate").toString()
+                val adult = backStackEntry.arguments?.getString("adult").toString()
+                val children = backStackEntry.arguments?.getString("children").toString()
+                SearchScreen(
+                    navController = navController,
+                    searchQuery = searchQuery,
+                    checkInDate = checkInDate,
+                    checkOutDate = checkOutDate,
+                    adult = adult,
+                    children = children
+                )
             }
         }
     }
