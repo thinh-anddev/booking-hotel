@@ -1,73 +1,43 @@
-package com.example.booking_hotel.presentation.search
+package com.example.booking_hotel.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.example.booking_hotel.domain.model.Property
-import com.example.booking_hotel.presentation.common.EmptyScreen
-import com.example.booking_hotel.presentation.common.ShimmerEffect
+import com.example.booking_hotel.presentation.home.components.ItemHotSearch
 import com.example.booking_hotel.presentation.search.components.ItemHotel
+import com.example.booking_hotel.presentation.search.handlePagingResult
 
 @Composable
-fun HotelList(
+fun HotelSearchList(
     modifier: Modifier = Modifier,
     properties: LazyPagingItems<Property>
 ) {
     val handlePagingResult = handlePagingResult(properties = properties)
-
     if (handlePagingResult) {
-        LazyColumn(
+        LazyRow(
             modifier = modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 start = 7.dp,
                 end = 21.dp
             ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(
                 count = properties.itemCount
             ) {
                 properties[it].let { property ->
                     if (property != null) {
-                        ItemHotel(property = property)
+                        ItemHotSearch(property = property)
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun handlePagingResult(
-    properties: LazyPagingItems<Property>
-): Boolean {
-    val loadState = properties.loadState
-    val error = when {
-        loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
-        loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
-        loadState.append is LoadState.Error -> loadState.append as LoadState.Error
-        else -> null
-    }
-
-    return when {
-        loadState.refresh is LoadState.Loading -> {
-            ShimmerEffect()
-            false
-        }
-
-        error != null -> {
-            EmptyScreen(error = error)
-            false
-        }
-
-        else -> {
-            true
         }
     }
 }

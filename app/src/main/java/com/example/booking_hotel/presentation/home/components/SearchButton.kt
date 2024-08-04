@@ -29,7 +29,8 @@ fun SearchButton(
     Row(
         modifier = modifier
             .background(TextColor)
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .clip(RoundedCornerShape(4.dp)),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -42,9 +43,7 @@ fun SearchButton(
                     color = Color.White,
                     fontFamily = FontFamily(Font(R.font.lato_regular)),
                     fontSize = 16.sp
-                ),
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
+                )
             )
         }
     }

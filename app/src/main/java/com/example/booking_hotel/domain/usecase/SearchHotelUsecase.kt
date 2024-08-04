@@ -14,14 +14,16 @@ class SearchHotelUsecase(
         checkOutDate: String,
         adults: String,
         children: String,
-        searchQuery: String
+        searchQuery: String,
+        sortBy: String
     ): Flow<PagingData<Property>> {
         return hotelRepository.searchHotels(
             checkInDate = checkInDate,
             checkOutDate = checkOutDate,
             adults = adults,
             children = children,
-            searchQuery = searchQuery
+            searchQuery = searchQuery,
+            sortBy = sortBy
         )
     }
 }

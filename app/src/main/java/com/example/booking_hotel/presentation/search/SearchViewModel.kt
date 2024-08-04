@@ -24,11 +24,12 @@ class SearchViewModel @Inject constructor(
         children: String
     ): Flow<PagingData<Property>> {
         val hotels = searchHotelUsecase(
-            searchQuery = query,
             checkInDate = checkInDate,
             checkOutDate = checkOutDate,
             adults = adult,
-            children = children
+            children = children,
+            searchQuery = query,
+            sortBy = ""
         ).cachedIn(viewModelScope)
         return hotels
     }

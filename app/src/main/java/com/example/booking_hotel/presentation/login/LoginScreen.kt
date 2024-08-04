@@ -131,8 +131,11 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(35.dp))
             TextButton(
                 onClick = {
-                    showErrors = true
-                    viewModel.login()
+//                    showErrors = true
+//                    viewModel.login()
+                    navController.navigate(Route.NavigatorScreen.route) {
+                        popUpTo(Route.LoginScreen.route) { inclusive = true }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

@@ -10,7 +10,8 @@ class HotelPagingSource(
     private val checkOutDate: String,
     private val adults: String,
     private val children: String,
-    private val searchQuery: String
+    private val searchQuery: String,
+    private val sortBy: String // hottest hotel = 13
 ): PagingSource<Int, Property>() {
 
     private var totalHotelCount = 0
@@ -31,6 +32,7 @@ class HotelPagingSource(
                 adults = adults,
                 children = children,
                 searchQuery = searchQuery,
+                sortBy = sortBy,
                 page = page
             )
             totalHotelCount += hotelResponse.properties.size

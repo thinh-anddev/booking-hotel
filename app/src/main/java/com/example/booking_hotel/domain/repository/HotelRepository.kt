@@ -13,6 +13,7 @@ interface HotelRepository {
         checkOutDate: String,
         adults: String,
         children: String,
-        searchQuery: String
+        searchQuery: String,
+        sortBy: String
     ) : Flow<PagingData<Property>>
 }

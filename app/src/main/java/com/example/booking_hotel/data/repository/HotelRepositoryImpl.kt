@@ -18,7 +18,8 @@ class HotelRepositoryImpl(
         checkOutDate: String,
         adults: String,
         children: String,
-        searchQuery: String
+        searchQuery: String,
+        sortBy: String, //hottest hotel = 13
     ): Flow<PagingData<Property>> {
         return Pager(
             config = PagingConfig(pageSize = 10),
@@ -29,7 +30,8 @@ class HotelRepositoryImpl(
                     checkOutDate = checkOutDate,
                     adults = adults,
                     children = children,
-                    searchQuery = searchQuery
+                    searchQuery = searchQuery,
+                    sortBy = sortBy
                 )
             }
         ).flow

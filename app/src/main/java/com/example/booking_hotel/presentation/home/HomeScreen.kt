@@ -1,7 +1,10 @@
 package com.example.booking_hotel.presentation.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,14 +21,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -39,12 +52,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.booking_hotel.R
+import com.example.booking_hotel.helper.DateUtils
+import com.example.booking_hotel.helper.ToastText.LESS_INFORMATION
+import com.example.booking_hotel.helper.showToast
+import com.example.booking_hotel.presentation.common.HotelCardEffect
+import com.example.booking_hotel.presentation.dialog.DialogDatePicker
 import com.example.booking_hotel.presentation.home.components.CheckWidget
 import com.example.booking_hotel.presentation.home.components.NumberPeopleWidget
 import com.example.booking_hotel.presentation.home.components.SearchBar
 import com.example.booking_hotel.presentation.home.components.SearchButton
 import com.example.booking_hotel.presentation.navgraph.Route
+import com.example.booking_hotel.ui.theme.TextColor
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -54,6 +75,27 @@ fun HomeScreen(
     val searchQuery by viewModel.searchQuery
     val children by viewModel.children
     val adult by viewModel.adult
+
+    var showDialogCheckIn by remember { mutableStateOf(false) }
+    var showDialogCheckOut by remember { mutableStateOf(false) }
+    val checkInDate by viewModel.checkInDate
+    val checkOutDate by viewModel.checkOutDate
+    val dateState = rememberDatePickerState()
+    val dateStateCheckOut = rememberDatePickerState()
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.setCurrentDate()
+    }
+
+    dateState.selectedDateMillis?.let {
+        viewModel.setSelectedDateMillis(it, true)
+    }
+
+    dateStateCheckOut.selectedDateMillis?.let {
+        viewModel.setSelectedDateMillis(it, false)
+    }
 
     Box(
         modifier = modifier
@@ -68,6 +110,48 @@ fun HomeScreen(
                 .navigationBarsPadding()
                 .padding(horizontal = 16.dp)
         ) {
+            if (showDialogCheckIn) {
+                DatePickerDialog(
+                    onDismissRequest = { showDialogCheckIn = false },
+                    confirmButton = {
+                        Button(
+                            onClick = { showDialogCheckIn = false }
+                        ) {
+                            Text(text = "Ok")
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = { showDialogCheckIn = false }
+                        ) {
+                            Text(text = "Hủy")
+                        }
+                    }
+                ) {
+                    DatePicker(state = dateState, showModeToggle = true)
+                }
+            }
+            if (showDialogCheckOut) {
+                DatePickerDialog(
+                    onDismissRequest = { showDialogCheckOut = false },
+                    confirmButton = {
+                        Button(
+                            onClick = { showDialogCheckOut = false }
+                        ) {
+                            Text(text = "Ok")
+                        }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = { showDialogCheckOut = false }
+                        ) {
+                            Text(text = "Hủy")
+                        }
+                    }
+                ) {
+                    DatePicker(state = dateStateCheckOut, showModeToggle = true)
+                }
+            }
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,9 +207,25 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                CheckWidget(check = "Check-in", date = "asdfasd", modifier = Modifier.weight(1f))
+                CheckWidget(
+                    check = "Check-in",
+                    date = checkInDate,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            showDialogCheckIn = true
+                        }
+                )
                 Spacer(modifier = Modifier.width(20.dp))
-                CheckWidget(check = "Check-out", date = "asdfasd", modifier = Modifier.weight(1f))
+                CheckWidget(
+                    check = "Check-out",
+                    date = checkOutDate,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            showDialogCheckOut = true
+                        }
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
             NumberPeopleWidget(
@@ -138,22 +238,35 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.height(22.dp))
             SearchButton(onClick = {
-                navController.navigate(
-                    route = Route.SearchScreen.passData(
-                        searchQuery = searchQuery,
-                        checkInDate = "2024-08-03",
-                        checkOutDate = "2024-08-04",
-                        children = children.toString(),
-                        adult = adult.toString()
+                if (searchQuery == "" || checkInDate == "" || checkOutDate == "") {
+                    LESS_INFORMATION.showToast(context = context)
+                } else {
+                    navController.navigate(
+                        route = Route.SearchScreen.passData(
+                            searchQuery = searchQuery,
+                            checkInDate = checkInDate,
+                            checkOutDate = checkOutDate,
+                            children = children.toString(),
+                            adult = adult.toString()
+                        )
                     )
-                )
+                }
             })
+            Spacer(modifier = Modifier.height(30.dp))
+            Text(text = "Tìm kiếm nhiều nhất", style = TextStyle(
+                color = TextColor,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.lato_bold))
+            ))
+            Spacer(modifier = Modifier.height(24.dp))
+            HotelSearchList(properties = viewModel.getListHotSearch().collectAsLazyPagingItems())
         }
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeScreenPreview() {
-//    HomeScreen()
-//}
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+//    val navController = rememberNavController()
+//    HomeScreen(navController = navController)
+}

@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,7 +45,7 @@ fun PeopleCount(
             )
         )
         IconButton(onClick = minus) {
-            Icon(imageVector = Icons.Default.Close, contentDescription = "clear")
+            Icon(painterResource(id = R.drawable.ic_minus), contentDescription = "clear")
         }
     }
 }

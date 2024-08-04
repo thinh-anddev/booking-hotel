@@ -20,6 +20,7 @@ interface HotelAPI {
         @Query("children") children: String,
         @Query("q") searchQuery: String,
         @Query("page") page: Int,
-        @Query("api_key") apiKey: String = Constant.API_KEY
+        @Query("api_key") apiKey: String = Constant.API_KEY,
+        @Query("sort_by") sortBy: String
     ): HotelResponse
 }
