@@ -5,9 +5,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,14 +18,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -62,6 +67,7 @@ import com.example.booking_hotel.presentation.home.components.NumberPeopleWidget
 import com.example.booking_hotel.presentation.home.components.SearchBar
 import com.example.booking_hotel.presentation.home.components.SearchButton
 import com.example.booking_hotel.presentation.navgraph.Route
+import com.example.booking_hotel.ui.theme.Color_757575
 import com.example.booking_hotel.ui.theme.TextColor
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -253,13 +259,87 @@ fun HomeScreen(
                 }
             })
             Spacer(modifier = Modifier.height(30.dp))
-            Text(text = "Tìm kiếm nhiều nhất", style = TextStyle(
-                color = TextColor,
-                fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.lato_bold))
-            ))
+            Text(
+                text = "Tìm kiếm nhiều nhất", style = TextStyle(
+                    color = TextColor,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.lato_bold))
+                )
+            )
             Spacer(modifier = Modifier.height(24.dp))
             HotelSearchList(properties = viewModel.getListHotSearch().collectAsLazyPagingItems())
+            Spacer(modifier = Modifier.height(48.dp))
+            Text(
+                text = "Tại sao lại lựa chọn Onism?", style = TextStyle(
+                    color = TextColor,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.lato_bold))
+                )
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            LazyRow(
+                modifier = modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    start = 7.dp,
+                    end = 21.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                items(
+                    count = listExtension.size
+                ) {
+                    Image(painterResource(id = listExtension[it].image), contentDescription = null)
+                }
+            }
+            Spacer(modifier = Modifier.height(48.dp))
+            Text(
+                text = "Đối tác", style = TextStyle(
+                    color = TextColor,
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.lato_bold))
+                )
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painterResource(id = R.drawable.img_marvella),
+                    contentDescription = null,
+                    modifier = Modifier.size(104.dp)
+                )
+                Divider(
+                    color = Color_757575,
+                    modifier = Modifier.height(62.dp).width(1.dp)
+                )
+                Image(
+                    painterResource(id = R.drawable.img_marvella),
+                    contentDescription = null,
+                    modifier = Modifier.size(104.dp)
+                )
+                Divider(
+                    color = Color_757575,
+                    modifier = Modifier.height(62.dp).width(1.dp)
+                )
+                Image(
+                    painterResource(id = R.drawable.img_marvella),
+                    contentDescription = null,
+                    modifier = Modifier.size(104.dp)
+                )
+                Divider(
+                    color = Color_757575,
+                    modifier = Modifier.height(62.dp).width(1.dp)
+                )
+                Image(
+                    painterResource(id = R.drawable.img_marvella),
+                    contentDescription = null,
+                    modifier = Modifier.size(104.dp)
+                )
+            }
         }
     }
 }
