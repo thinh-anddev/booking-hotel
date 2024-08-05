@@ -120,7 +120,6 @@ class HomeViewModel @Inject constructor(
                 searchQuery = "viet nam",
                 sortBy = "13" //hottest
             ).cachedIn(viewModelScope)
-            _searchQuery.value = ""
             Log.d("API_TEST", "Response: $properties")
         } catch (e: Exception) {
             Log.e("API_TEST", "Error: ${e.message}")
