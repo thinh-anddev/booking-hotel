@@ -1,6 +1,5 @@
 package com.example.booking_hotel.data.remote
 
-import android.icu.util.Currency
 import com.example.booking_hotel.data.remote.dto.HotelResponse
 import com.example.booking_hotel.helper.Constant
 import retrofit2.http.GET

@@ -28,3 +28,11 @@ data class Property(
     val total_rate: TotalRate,
     val type: String
 )
+
+fun List<Property>.sortByPrice(): List<Property> {
+    return this.sortedBy { property -> property.rate_per_night.lowest }
+}
+
+fun List<Property>.sortByViewRating(): List<Property> {
+    return this.sortedByDescending { property -> property.rate_per_night.lowest }
+}
