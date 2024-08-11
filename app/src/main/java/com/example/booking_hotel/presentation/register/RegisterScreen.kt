@@ -173,7 +173,7 @@ fun RegisterScreen(
                     ),
                     modifier = Modifier.clickable {
                         navController.navigate(Route.LoginScreen.route) {
-                            popUpTo(Route.RegisterScreen.route) {inclusive = false}
+                            popUpTo(0) {inclusive = false}
                         }
                     }
                 )

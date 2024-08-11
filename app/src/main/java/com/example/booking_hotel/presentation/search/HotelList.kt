@@ -17,7 +17,8 @@ import com.example.booking_hotel.presentation.search.components.ItemHotel
 @Composable
 fun HotelList(
     modifier: Modifier = Modifier,
-    properties: LazyPagingItems<Property>
+    properties: LazyPagingItems<Property>,
+    onClick: (Property) -> Unit
 ) {
     val handlePagingResult = handlePagingResult(properties = properties)
 
@@ -35,7 +36,9 @@ fun HotelList(
             ) {
                 properties[it].let { property ->
                     if (property != null) {
-                        ItemHotel(property = property)
+                        ItemHotel(property = property, onClick = {
+                            onClick(property)
+                        })
                     }
                 }
             }

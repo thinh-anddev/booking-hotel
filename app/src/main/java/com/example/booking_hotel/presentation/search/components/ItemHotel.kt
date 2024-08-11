@@ -2,6 +2,7 @@ package com.example.booking_hotel.presentation.search.components
 
 import android.R.attr.maxLines
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,13 +36,14 @@ import com.example.booking_hotel.ui.theme.TextColor
 @Composable
 fun ItemHotel(
     property: Property? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     val context = LocalContext.current
     val images = property?.images
     val ratePerNightX = property?.rate_per_night
     ConstraintLayout(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth().clickable { onClick.invoke() }
     ) {
         property?.let {
             val (image, name, rate, price) = createRefs()

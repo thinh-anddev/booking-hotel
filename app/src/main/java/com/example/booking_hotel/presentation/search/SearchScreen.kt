@@ -34,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.room.util.query
 import com.example.booking_hotel.R
+import com.example.booking_hotel.domain.model.Property
 import com.example.booking_hotel.helper.showToast
 import com.example.booking_hotel.presentation.search.components.BottomButton
 import com.example.booking_hotel.presentation.search.components.listBottomButton
@@ -49,6 +50,7 @@ fun SearchScreen(
     children: String,
     viewModel: SearchViewModel = hiltViewModel(),
     event: (SearchEvent) -> Unit,
+    navigateToDetail: (Property) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -132,7 +134,7 @@ fun SearchScreen(
                         )
                     }
                 }
-                HotelList(properties = properties)
+                HotelList(properties = properties, onClick = navigateToDetail)
             }
         }
     }

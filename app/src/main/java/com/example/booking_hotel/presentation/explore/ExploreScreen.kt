@@ -51,7 +51,7 @@ fun ExploreScreen(
                     fontSize = 24.sp
                 ))
             }
-            HotelList(properties = properties, modifier = Modifier.padding(top = 35.dp))
+//            HotelList(properties = properties, modifier = Modifier.padding(top = 35.dp))
         }
     }
 }

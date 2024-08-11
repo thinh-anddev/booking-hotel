@@ -134,7 +134,7 @@ fun LoginScreen(
 //                    showErrors = true
 //                    viewModel.login()
                     navController.navigate(Route.NavigatorScreen.route) {
-                        popUpTo(Route.LoginScreen.route) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
                     }
                 },
                 modifier = Modifier

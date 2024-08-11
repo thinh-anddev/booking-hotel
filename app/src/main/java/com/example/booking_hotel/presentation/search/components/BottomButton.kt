@@ -79,6 +79,12 @@ val listBottomButton = listOf(
     BottomButtonItem(R.drawable.ic_most_view, "Xem nhiều")
 )
 
+val listBottomButtonDetail = listOf(
+    BottomButtonItem(R.drawable.ic_calendar, ""),
+    BottomButtonItem(R.drawable.ic_moon, ""),
+    BottomButtonItem(R.drawable.ic_two_user, "")
+)
+
 @Preview
 @Composable
 fun BottomButtonPreview() {

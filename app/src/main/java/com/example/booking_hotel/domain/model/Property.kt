@@ -1,5 +1,8 @@
 package com.example.booking_hotel.domain.model
 
+import android.os.Parcelable
+import java.io.Serializable
+
 data class Property(
     val amenities: List<String>,
     val check_in_time: String,
@@ -27,7 +30,7 @@ data class Property(
     val serpapi_property_details_link: String,
     val total_rate: TotalRate,
     val type: String
-)
+): Serializable
 
 fun List<Property>.sortByPrice(): List<Property> {
     return this.sortedBy { property -> property.rate_per_night.lowest }
