@@ -10,9 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-
-) : ViewModel(){
+class SplashViewModel @Inject constructor() : ViewModel(){
 
     private val _navigateToNextScreen = MutableLiveData<Boolean>()
     val navigateToNextScreen: LiveData<Boolean> = _navigateToNextScreen

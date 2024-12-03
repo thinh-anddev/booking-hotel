@@ -135,6 +135,6 @@ class SearchViewModel @Inject constructor(
 }
 
 sealed class SearchEvent {
-    data object Price : SearchEvent()
-    data object View : SearchEvent()
+    object Price : SearchEvent()
+    object View : SearchEvent()
 }
