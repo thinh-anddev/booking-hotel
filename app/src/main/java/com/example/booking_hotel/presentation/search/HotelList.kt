@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.presentation.common.EmptyScreen
 import com.example.booking_hotel.presentation.common.ShimmerEffect
 import com.example.booking_hotel.presentation.search.components.ItemHotel
@@ -17,8 +17,8 @@ import com.example.booking_hotel.presentation.search.components.ItemHotel
 @Composable
 fun HotelList(
     modifier: Modifier = Modifier,
-    properties: LazyPagingItems<Property>,
-    onClick: (Property) -> Unit
+    properties: LazyPagingItems<Hotel>,
+    onClick: (Hotel) -> Unit
 ) {
     val handlePagingResult = handlePagingResult(properties = properties)
 
@@ -36,7 +36,7 @@ fun HotelList(
             ) {
                 properties[it].let { property ->
                     if (property != null) {
-                        ItemHotel(property = property, onClick = {
+                        ItemHotel(hotel = property, onClick = {
                             onClick(property)
                         })
                     }
@@ -48,7 +48,7 @@ fun HotelList(
 
 @Composable
 fun handlePagingResult(
-    properties: LazyPagingItems<Property>
+    properties: LazyPagingItems<Hotel>
 ): Boolean {
     val loadState = properties.loadState
     val error = when {

@@ -6,7 +6,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -20,7 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.booking_hotel.R
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.presentation.account.AccountScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
@@ -185,7 +184,7 @@ fun NavigatorScreen(
                     navigateToDetail = { property ->
                         navigateToDetails(
                             navController = navController,
-                            property = property
+                            hotel = property
                         )
                     }
                 )
@@ -193,11 +192,11 @@ fun NavigatorScreen(
             composable(
                 route = Route.DetailScreen.route
             ) {
-                navController.previousBackStackEntry?.savedStateHandle?.get<Property?>(Constant.PROPERTY)
+                navController.previousBackStackEntry?.savedStateHandle?.get<Hotel?>(Constant.PROPERTY)
                     ?.let {
                         property ->
                         DetailScreen(
-                            property = property,
+                            hotel = property,
                             navController = navController
                         )
                     }
@@ -221,8 +220,8 @@ fun navigateToTab(
     }
 }
 
-private fun navigateToDetails(navController: NavController, property: Property) {
-    navController.currentBackStackEntry?.savedStateHandle?.set(Constant.PROPERTY, property)
+private fun navigateToDetails(navController: NavController, hotel: Hotel) {
+    navController.currentBackStackEntry?.savedStateHandle?.set(Constant.PROPERTY, hotel)
     navController.navigate(
         route = Route.DetailScreen.route
     )

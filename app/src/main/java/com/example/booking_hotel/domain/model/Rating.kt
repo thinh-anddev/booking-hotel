@@ -1,6 +1,7 @@
 package com.example.booking_hotel.domain.model
 
 data class Rating(
-    val count: Int,
-    val stars: Int
+    val id: Long?,
+    val stars: Int?,
+    val count: Int?
 )

@@ -1,8 +1,11 @@
 package com.example.booking_hotel.helper
 
 object Constant {
-    const val BASE_URL = "https://serpapi.com/"
-    const val API_KEY = "4ae6272aadcf0a7c07b26c906490346c576557dbf62aafe13c06ae92ad1c45ac"
-
+    //emulator
+    //phone: 192.168.102.9
+    const val BASE_URL = "http://192.168.102.9:8081/"
     const val PROPERTY = "PROPERTY"
+
+    //search hotel
+    const val API_GET_HOTEL = "api/hotels/search"
 }

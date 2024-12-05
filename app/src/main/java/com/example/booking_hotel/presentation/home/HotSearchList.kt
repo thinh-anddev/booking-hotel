@@ -3,22 +3,21 @@ package com.example.booking_hotel.presentation.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.presentation.home.components.ItemHotSearch
-import com.example.booking_hotel.presentation.search.components.ItemHotel
 import com.example.booking_hotel.presentation.search.handlePagingResult
 
 @Composable
 fun HotelSearchList(
     modifier: Modifier = Modifier,
-    properties: LazyPagingItems<Property>
+    properties: LazyPagingItems<Hotel>
 ) {
+    println("list size: ${properties.itemCount}")
     val handlePagingResult = handlePagingResult(properties = properties)
     if (handlePagingResult) {
         LazyRow(
@@ -34,7 +33,7 @@ fun HotelSearchList(
             ) {
                 properties[it].let { property ->
                     if (property != null) {
-                        ItemHotSearch(property = property)
+                        ItemHotSearch(hotel = property)
                     }
                 }
             }

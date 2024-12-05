@@ -1,7 +1,6 @@
 package com.example.booking_hotel.presentation.detail
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -29,19 +26,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.presentation.detail.components.BottomButtonDetail
 import com.example.booking_hotel.presentation.detail.components.PageIndicatorDetail
 import com.example.booking_hotel.presentation.detail.page.OverviewPage
@@ -55,27 +54,31 @@ import com.example.booking_hotel.ui.theme.TitleColor
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    property: Property
+    hotel: Hotel
 ) {
     Scaffold(
         modifier = modifier
             .fillMaxSize(),
         bottomBar = {
-            BottomButtonDetail(checkInDate = "1/8/2003", numberNight = 3, numberPeople = 4, items = listBottomButtonDetail)
+            BottomButtonDetail(
+                checkInDate = "1/8/2003",
+                numberNight = 3,
+                numberPeople = 4,
+                items = listBottomButtonDetail
+            )
         }
     ) {
         val scrollState = rememberScrollState()
         val context = LocalContext.current
-        val images = property.images
+        val images = hotel.images
         val page = listOf(
-            images[0],
-            images[1],
-            images[2]
+            images?.get(0),
+            images?.get(1),
+            images?.get(2)
         )
         val tabs = listOf(
             "Tổng quan",
@@ -117,7 +120,7 @@ fun DetailScreen(
                         )
                 ) { index ->
                     ImagePage(
-                        images = page[index], context = context, modifier = Modifier
+                        images = page[index]!!, context = context, modifier = Modifier
                     )
                 }
                 PageIndicatorDetail(
@@ -158,12 +161,13 @@ fun DetailScreen(
                 modifier = Modifier
                     .padding(horizontal = 15.dp)
                     .padding(top = 30.dp)
+                    .padding(bottom = 10.dp)
                     .constrainAs(title) {
                         top.linkTo(image.bottom)
                     }
             ) {
                 Text(
-                    text = property.name, style = TextStyle(
+                    text = hotel.name ?: "", style = TextStyle(
                         color = TextColor,
                         fontFamily = FontFamily(Font(R.font.lato_bold)),
                         fontSize = 24.sp
@@ -176,7 +180,7 @@ fun DetailScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = property.name, style = TextStyle(
+                        text = hotel.name ?: "Unknown", style = TextStyle(
                             color = Color.Black,
                             fontFamily = FontFamily(Font(R.font.lato_regular)),
                             fontSize = 18.sp,
@@ -211,17 +215,6 @@ fun DetailScreen(
                         tabs.forEachIndexed { index, title ->
                             val iconVisible = pagerState.currentPage == index
                             Tab(
-                                text = {
-                                    Text(
-                                        text = title, style = TextStyle(
-                                            color = TextColor,
-                                            fontFamily = FontFamily(Font(R.font.lato_regular)),
-                                            fontSize = 16.sp
-                                        ),
-                                        modifier = Modifier
-                                            .height(25.dp)
-                                    )
-                                },
                                 selected = pagerState.currentPage == index,
                                 onClick = {
                                     scope.launch {
@@ -232,18 +225,24 @@ fun DetailScreen(
                                     .constrainAs(tab) {
                                         top.linkTo(parent.top)
                                     }
-                            )
-//                        if (iconVisible) {
-//                            Divider(
-//                                modifier = Modifier
-//                                    .height(4.dp)
-//                                    .clip(RoundedCornerShape(4.dp))
-//                                    .constrainAs(line) {
-//                                        top.linkTo(tab.bottom)
-//                                    },
-//                                color = TextColor
-//                            )
-//                        }
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)
+                                ) {
+                                    Text(
+                                        text = title,
+                                        style = TextStyle(
+                                            color = TextColor,
+                                            fontFamily = FontFamily(Font(R.font.lato_regular)),
+                                            fontSize = 13.sp
+                                        ),
+                                        modifier = Modifier
+                                            .align(Alignment.Center),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -252,7 +251,7 @@ fun DetailScreen(
                     modifier = Modifier
                 ) { page ->
                     when (page) {
-                        0 -> OverviewPage(property = property)
+                        0 -> OverviewPage(hotel = hotel)
                         1 -> RoomTypePage()
                         2 -> PolicyPage()
                         3 -> RatePage()
@@ -261,4 +260,34 @@ fun DetailScreen(
             }
         }
     }
+}
+
+
+@Preview
+@Composable
+fun SearchScreenPreview() {
+    val navController = rememberNavController()
+    val hotel = Hotel(
+        id = 1L,
+        type = "Hotel",
+        name = "Sample Hotel",
+        link = "https://example.com",
+        checkInTime = "14:00",
+        checkOutTime = "12:00",
+        hotelClass = "5-star",
+        extractedHotelClass = 5,
+        overallRating = 4.5,
+        reviews = 200,
+        locationRating = 4.0,
+        propertyToken = null,
+        serpapiPropertyDetailsLink = null,
+        gpsCoordinates = null,
+        ratePerNight = null,
+        amenities = null,
+        nearbyPlaces = null,
+        images = null,
+        ratings = null,
+        reviewsBreakdown = null
+    )
+    DetailScreen(navController = navController,hotel = hotel)
 }

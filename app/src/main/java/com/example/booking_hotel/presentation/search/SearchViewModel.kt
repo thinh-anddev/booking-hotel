@@ -1,8 +1,6 @@
 package com.example.booking_hotel.presentation.search
 
 import android.util.Log
-import android.view.View
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -11,10 +9,7 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.cachedIn
-import androidx.paging.filter
-import androidx.paging.flatMap
-import androidx.paging.map
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -31,8 +26,8 @@ class SearchViewModel @Inject constructor(
     private val searchHotelUsecase: SearchHotelUsecase
 ) : ViewModel() {
 
-    private val _properties = MutableStateFlow<PagingData<Property>>(PagingData.empty())
-    val properties: StateFlow<PagingData<Property>> = _properties
+    private val _properties = MutableStateFlow<PagingData<Hotel>>(PagingData.empty())
+    val properties: StateFlow<PagingData<Hotel>> = _properties
 
     fun onEvent(event: SearchEvent) {
         when (event) {
@@ -88,7 +83,7 @@ class SearchViewModel @Inject constructor(
                     // Log dữ liệu ban đầu
                     Log.d("sortByPrice", "Initial data: ${pagingData.toList()}")
 
-                    val sortedList = pagingData.toList().sortedBy { it.rate_per_night.lowest }
+                    val sortedList = pagingData.toList().sortedBy { it.ratePerNight!!.lowest }
                     Log.d("sortByPrice", "Sorted data: $sortedList")
 
                     // Gọi hàm toPagingData và log kết quả
@@ -118,12 +113,11 @@ class SearchViewModel @Inject constructor(
         children: String
     ) {
         searchHotelUsecase(
-            checkInDate = checkInDate,
-            checkOutDate = checkOutDate,
-            adults = adult,
-            children = children,
-            searchQuery = query,
-            sortBy = ""
+//            checkInDate = checkInDate,
+//            checkOutDate = checkOutDate,
+//            adults = adult,
+//            children = children,
+            query = query,
         ).cachedIn(viewModelScope).also { flow ->
             viewModelScope.launch {
                 flow.collectLatest { pagingData ->

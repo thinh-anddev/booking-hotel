@@ -1,6 +1,5 @@
 package com.example.booking_hotel.presentation.home.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,13 +11,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,19 +29,18 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.booking_hotel.R
-import com.example.booking_hotel.domain.model.Property
-import com.example.booking_hotel.ui.theme.Color_986601
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.ui.theme.TitleColor
 
 @Composable
 fun ItemHotSearch(
     modifier: Modifier = Modifier,
-    property: Property? = null
+    hotel: Hotel? = null
 ) {
-    property?.let {
+    hotel?.let {
         val context = LocalContext.current
         val images = it.images
-        val ratePerNightX = it.rate_per_night
+        val ratePerNightX = it.ratePerNight
         Card(
             modifier = modifier
                 .width(225.dp)
@@ -56,7 +52,7 @@ fun ItemHotSearch(
                 modifier = Modifier
             ) {
                 AsyncImage(
-                    model = ImageRequest.Builder(context).data(images[0].original_image).build(),
+                    model = ImageRequest.Builder(context).data(images?.get(0)?.originalImage).build(),
                     contentDescription = null,
                     modifier = Modifier.weight(4f),
                     contentScale = ContentScale.Crop
@@ -84,7 +80,7 @@ fun ItemHotSearch(
                     )
                     Spacer(modifier = Modifier.height(11.dp))
                     Text(
-                        text = it.description ?: "No description", style = TextStyle(
+                        text = "it.description" ?: "No description", style = TextStyle(
                             color = Color.Black,
                             fontSize = 16.sp,
                             fontFamily = FontFamily(Font(R.font.lato_regular)),

@@ -8,12 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -28,8 +27,8 @@ class ExploreViewModel @Inject constructor(
     private val _checkInDate = mutableStateOf("")
     private val _checkOutDate = mutableStateOf("")
 
-    private val _hotels = MutableStateFlow<PagingData<Property>>(PagingData.empty())
-    var hotels: StateFlow<PagingData<Property>> = _hotels
+    private val _hotels = MutableStateFlow<PagingData<Hotel>>(PagingData.empty())
+    var hotels: StateFlow<PagingData<Hotel>> = _hotels
 
     init {
         setCurrentDate()
@@ -39,12 +38,7 @@ class ExploreViewModel @Inject constructor(
     private fun getListHotelExplore() {
         viewModelScope.launch {
             usecase.invoke(
-                checkOutDate = _checkOutDate.value,
-                checkInDate =  _checkInDate.value,
-                adults = "1",
-                children = "1",
-                searchQuery = "viet nam",
-                sortBy = "" //hottest
+                query = "ho chi minh",
             ).cachedIn(viewModelScope).collect {
                     pagingData ->
                 _hotels.value = pagingData

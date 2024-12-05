@@ -1,6 +1,5 @@
 package com.example.booking_hotel.presentation.detail.page
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,16 +23,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.booking_hotel.R
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.ui.theme.TextColor
 
 @Composable
 fun OverviewPage(
-    property: Property,
+    hotel: Hotel,
     modifier: Modifier = Modifier
 ) {
-    property?.let { item ->
-        val nearbyPlace = item.nearby_places
+    hotel?.let { item ->
+        val nearbyPlace = item.nearbyPlaces
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -51,7 +48,7 @@ fun OverviewPage(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = item.description, style = TextStyle(
+                text = "item.description", style = TextStyle(
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontFamily = FontFamily(Font(R.font.lato_regular))
@@ -70,9 +67,9 @@ fun OverviewPage(
                 modifier = Modifier
             ) {
                 items(
-                    items = if (nearbyPlace.size >= 6) nearbyPlace.take(6) else nearbyPlace,
+                    items = (nearbyPlace?.take(6) ?: emptyList()),
                 ) { nearByPlaceItem ->
-                    nearByPlaceItem.transportations.forEach { transportation ->
+                    nearByPlaceItem.transportations?.forEach { transportation ->
                         val image = when (transportation.type) {
                             "Taxi" -> R.drawable.ic_taxi
                             "Walking" -> R.drawable.ic_walk
@@ -90,7 +87,7 @@ fun OverviewPage(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "${nearByPlaceItem.name ?: "Unknown"} (${transportation.duration ?: "Unknown"})",
+                                text = "${nearByPlaceItem.name ?: "Unknown"} (${transportation.type ?: "Unknown"})",
                                 style = TextStyle(
                                     color = Color.Black,
                                     fontSize = 14.sp,

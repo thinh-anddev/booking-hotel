@@ -1,6 +1,8 @@
 package com.example.booking_hotel.presentation.home
 
+import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +32,7 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -70,6 +73,7 @@ import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.ui.theme.Color_757575
 import com.example.booking_hotel.ui.theme.TextColor
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,7 +107,7 @@ fun HomeScreen(
         viewModel.setSelectedDateMillis(it, false)
     }
 
-    Box(
+    Scaffold(
         modifier = modifier
             .fillMaxSize()
             .background(color = Color.White)
@@ -114,7 +118,6 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState())
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .padding(horizontal = 16.dp)
         ) {
             if (showDialogCheckIn) {
                 DatePickerDialog(
@@ -163,6 +166,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .background(color = Color(0xFF4B5842))
                     .padding(horizontal = 20.dp)
+                    .padding(top = 50.dp)
                     .padding(bottom = 20.dp)
             ) {
                 val (title, content, avatar) = createRefs()
@@ -205,6 +209,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(30.dp))
             SearchBar(
                 text = searchQuery,
+                modifier = Modifier.padding(horizontal = 16.dp),
                 placeHolder = "Da lat, Lam Dong",
                 onValueChange = { viewModel.onSearchChange(it) },
             )
@@ -212,6 +217,7 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
             ) {
                 CheckWidget(
                     check = "Check-in",
@@ -235,6 +241,7 @@ fun HomeScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             NumberPeopleWidget(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 adults = adult.toString(),
                 childrens = children.toString(),
                 plusAdult = { viewModel.countAdult(true) },
@@ -243,7 +250,7 @@ fun HomeScreen(
                 minusChildren = { viewModel.countChildren(false) }
             )
             Spacer(modifier = Modifier.height(22.dp))
-            SearchButton(onClick = {
+            SearchButton(modifier = Modifier.padding(horizontal = 16.dp), onClick = {
                 if (searchQuery == "" || checkInDate == "" || checkOutDate == "") {
                     LESS_INFORMATION.showToast(context = context)
                 } else {
@@ -260,6 +267,7 @@ fun HomeScreen(
             })
             Spacer(modifier = Modifier.height(30.dp))
             Text(
+                modifier = Modifier.padding(start = 16.dp),
                 text = "Tìm kiếm nhiều nhất", style = TextStyle(
                     color = TextColor,
                     fontSize = 20.sp,
@@ -267,9 +275,13 @@ fun HomeScreen(
                 )
             )
             Spacer(modifier = Modifier.height(24.dp))
-            HotelSearchList(properties = viewModel.getListHotSearch().collectAsLazyPagingItems())
+            HotelSearchList(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                properties = viewModel.getListHotSearch().collectAsLazyPagingItems()
+            )
             Spacer(modifier = Modifier.height(48.dp))
             Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 text = "Tại sao lại lựa chọn Onism?", style = TextStyle(
                     color = TextColor,
                     fontSize = 20.sp,
@@ -278,7 +290,7 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
             LazyRow(
-                modifier = modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize().padding(horizontal = 16.dp),
                 contentPadding = PaddingValues(
                     start = 7.dp,
                     end = 21.dp
@@ -293,6 +305,7 @@ fun HomeScreen(
             }
             Spacer(modifier = Modifier.height(48.dp))
             Text(
+                modifier = Modifier.padding(start = 16.dp),
                 text = "Đối tác", style = TextStyle(
                     color = TextColor,
                     fontSize = 20.sp,
@@ -302,7 +315,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().padding(horizontal = 16.dp)
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
@@ -314,7 +327,9 @@ fun HomeScreen(
                 )
                 Divider(
                     color = Color_757575,
-                    modifier = Modifier.height(62.dp).width(1.dp)
+                    modifier = Modifier
+                        .height(62.dp)
+                        .width(1.dp)
                 )
                 Image(
                     painterResource(id = R.drawable.img_marvella),
@@ -323,7 +338,9 @@ fun HomeScreen(
                 )
                 Divider(
                     color = Color_757575,
-                    modifier = Modifier.height(62.dp).width(1.dp)
+                    modifier = Modifier
+                        .height(62.dp)
+                        .width(1.dp)
                 )
                 Image(
                     painterResource(id = R.drawable.img_marvella),
@@ -332,7 +349,9 @@ fun HomeScreen(
                 )
                 Divider(
                     color = Color_757575,
-                    modifier = Modifier.height(62.dp).width(1.dp)
+                    modifier = Modifier
+                        .height(62.dp)
+                        .width(1.dp)
                 )
                 Image(
                     painterResource(id = R.drawable.img_marvella),

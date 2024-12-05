@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,15 +12,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.booking_hotel.domain.model.Property
+import androidx.paging.filter
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
 import com.example.booking_hotel.helper.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -110,16 +109,11 @@ class HomeViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getListHotSearch(): Flow<PagingData<Property>> {
-        var properties: Flow<PagingData<Property>>? = null
+    fun getListHotSearch(): Flow<PagingData<Hotel>> {
+        var properties: Flow<PagingData<Hotel>>? = null
         try {
             properties = searchHotelUsecase.invoke(
-                checkOutDate = _checkOutDate.value,
-                checkInDate =  _checkInDate.value,
-                adults = _adult.value.toString(),
-                children = _children.value.toString(),
-                searchQuery = "viet nam",
-                sortBy = "13" //hottest
+                query = "quang ngai"
             ).cachedIn(viewModelScope)
             Log.d("API_TEST", "Response: $properties")
         } catch (e: Exception) {

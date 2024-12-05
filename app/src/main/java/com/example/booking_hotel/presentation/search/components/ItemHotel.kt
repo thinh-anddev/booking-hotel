@@ -1,6 +1,5 @@
 package com.example.booking_hotel.presentation.search.components
 
-import android.R.attr.maxLines
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.booking_hotel.R
-import com.example.booking_hotel.domain.model.Property
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.ui.theme.Color_4B5842
 import com.example.booking_hotel.ui.theme.Color_986601
 import com.example.booking_hotel.ui.theme.TextColor
@@ -35,20 +34,20 @@ import com.example.booking_hotel.ui.theme.TextColor
 
 @Composable
 fun ItemHotel(
-    property: Property? = null,
+    hotel: Hotel? = null,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val context = LocalContext.current
-    val images = property?.images
-    val ratePerNightX = property?.rate_per_night
+    val images = hotel?.images
+    val ratePerNightX = hotel?.ratePerNight
     ConstraintLayout(
         modifier = modifier.fillMaxWidth().clickable { onClick.invoke() }
     ) {
-        property?.let {
+        hotel?.let {
             val (image, name, rate, price) = createRefs()
             AsyncImage(
-                model = ImageRequest.Builder(context).data(images?.get(0)?.original_image).build(),
+                model = ImageRequest.Builder(context).data(images?.get(0)?.originalImage).build(),
                 contentDescription = null,
                 modifier = Modifier
                     .size(100.dp)
@@ -68,7 +67,7 @@ fun ItemHotel(
                     .padding(start = 10.dp)
             ) {
                 Text(
-                    text = property.name, style = TextStyle(
+                    text = hotel.name ?: "Unknown", style = TextStyle(
                         color = TextColor,
                         fontFamily = FontFamily(Font(R.font.lato_bold)),
                         fontSize = 16.sp
@@ -77,7 +76,7 @@ fun ItemHotel(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = property.description ?: "", style = TextStyle(
+                    text = "hotel.description" ?: "", style = TextStyle(
                         color = Color.Black,
                         fontFamily = FontFamily(Font(R.font.lato_regular)),
                         fontSize = 14.sp,
@@ -98,7 +97,7 @@ fun ItemHotel(
                     .background(Color_986601)
             ) {
                 Text(
-                    text = property.overall_rating.toString()+"/5" ?: "N/A", style = TextStyle(
+                    text = hotel.overallRating.toString()+"/5" ?: "N/A", style = TextStyle(
                         color = Color.White,
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.lato_regular))
@@ -123,7 +122,7 @@ fun ItemHotel(
                     )
                 )
                 Text(
-                    text = ratePerNightX!!.lowest, style = TextStyle(
+                    text = ratePerNightX?.lowest!!, style = TextStyle(
                         color = Color_986601,
                         fontFamily = FontFamily(Font(R.font.lato_bold)),
                         fontSize = 18.sp,
