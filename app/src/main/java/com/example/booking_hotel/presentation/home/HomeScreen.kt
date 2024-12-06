@@ -61,6 +61,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.booking_hotel.R
 import com.example.booking_hotel.helper.DateUtils
+import com.example.booking_hotel.helper.HideSystemBar
 import com.example.booking_hotel.helper.ToastText.LESS_INFORMATION
 import com.example.booking_hotel.helper.showToast
 import com.example.booking_hotel.presentation.common.HotelCardEffect
@@ -82,6 +83,7 @@ fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
+    HideSystemBar()
     val searchQuery by viewModel.searchQuery
     val children by viewModel.children
     val adult by viewModel.adult
@@ -290,7 +292,9 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
             LazyRow(
-                modifier = modifier.fillMaxSize().padding(horizontal = 16.dp),
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
                 contentPadding = PaddingValues(
                     start = 7.dp,
                     end = 21.dp
@@ -315,7 +319,8 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
-                    .fillMaxWidth().padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically

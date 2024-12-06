@@ -1,6 +1,8 @@
 package com.example.booking_hotel.presentation.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +43,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
 import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.domain.model.Image
 import com.example.booking_hotel.presentation.detail.components.BottomButtonDetail
 import com.example.booking_hotel.presentation.detail.components.PageIndicatorDetail
 import com.example.booking_hotel.presentation.detail.page.OverviewPage
@@ -75,11 +78,11 @@ fun DetailScreen(
         val scrollState = rememberScrollState()
         val context = LocalContext.current
         val images = hotel.images
-        val page = listOf(
-            images?.get(0),
-            images?.get(1),
-            images?.get(2)
-        )
+        val page = mutableListOf<Image>()
+        images?.let {
+            page.addAll(it)
+        } ?: run {
+        }
         val tabs = listOf(
             "Tổng quan",
             "Loại phòng",
@@ -120,7 +123,7 @@ fun DetailScreen(
                         )
                 ) { index ->
                     ImagePage(
-                        images = page[index]!!, context = context, modifier = Modifier
+                        images = page[index], context = context, modifier = Modifier
                     )
                 }
                 PageIndicatorDetail(
@@ -227,7 +230,9 @@ fun DetailScreen(
                                     }
                             ) {
                                 Box(
-                                    modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 10.dp)
                                 ) {
                                     Text(
                                         text = title,
@@ -251,7 +256,14 @@ fun DetailScreen(
                     modifier = Modifier
                 ) { page ->
                     when (page) {
-                        0 -> OverviewPage(hotel = hotel)
+                        0 -> OverviewPage(
+                            hotel = hotel,
+                            navigateToWeb = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                            context.startActivity(intent)
+                            }
+                        )
+
                         1 -> RoomTypePage()
                         2 -> PolicyPage()
                         3 -> RatePage()
@@ -289,5 +301,5 @@ fun SearchScreenPreview() {
         ratings = null,
         reviewsBreakdown = null
     )
-    DetailScreen(navController = navController,hotel = hotel)
+    DetailScreen(navController = navController, hotel = hotel)
 }
