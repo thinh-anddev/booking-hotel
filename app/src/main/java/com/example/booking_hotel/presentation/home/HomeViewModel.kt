@@ -17,6 +17,7 @@ import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
 import com.example.booking_hotel.helper.DateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest

@@ -8,4 +8,6 @@ object Constant {
 
     //search hotel
     const val API_GET_HOTEL = "api/hotels/search"
+    //get list rating
+    const val API_HOTEL = "api/hotels"
 }

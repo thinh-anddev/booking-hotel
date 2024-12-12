@@ -1,6 +1,5 @@
 package com.example.booking_hotel.presentation.detail.page
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,10 +38,6 @@ fun OverviewPage(
 ) {
     hotel.let { item ->
         val nearbyPlace = item.nearbyPlaces
-        Log.d("nearbyPlace", "${nearbyPlace!!.size}")
-        nearbyPlace.forEach {
-            Log.d("trans", "${it.transportations!!.size}")
-        }
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -86,33 +81,56 @@ fun OverviewPage(
                 modifier = Modifier
             ) {
                 items(
-                    items = nearbyPlace.take(6),
+                    items = nearbyPlace!!.take(6),
                 ) { nearByPlaceItem ->
-                    nearByPlaceItem.transportations?.forEach { transportation ->
-                        val image = when (transportation.type) {
-                            "Taxi" -> R.drawable.ic_taxi
-                            "Walking" -> R.drawable.ic_walk
-                            "Public transport" -> R.drawable.ic_bus
-                            else -> R.drawable.ic_taxi
-                        }
+                    if (nearByPlaceItem.transportations.isNullOrEmpty()) {
+                        val defaultImage = R.drawable.ic_taxi
                         Row(
                             modifier = Modifier,
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
                             Image(
-                                painterResource(id = image),
+                                painterResource(id = defaultImage),
                                 contentDescription = null
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "${nearByPlaceItem.name ?: "Unknown"} (${transportation.type ?: "Unknown"})",
+                                text = "${nearByPlaceItem.name ?: "Unknown"} (Taxi)",
                                 style = TextStyle(
                                     color = Color.Black,
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.lato_regular))
                                 )
                             )
+                        }
+                    } else {
+                        nearByPlaceItem.transportations?.forEach { transportation ->
+                            val image = when (transportation.type) {
+                                "Taxi" -> R.drawable.ic_taxi
+                                "Walking" -> R.drawable.ic_walk
+                                "Public transport" -> R.drawable.ic_bus
+                                else -> R.drawable.ic_taxi
+                            }
+                            Row(
+                                modifier = Modifier,
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Image(
+                                    painterResource(id = image),
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "${nearByPlaceItem.name ?: "Unknown"} (${transportation.type ?: "Unknown"})",
+                                    style = TextStyle(
+                                        color = Color.Black,
+                                        fontSize = 14.sp,
+                                        fontFamily = FontFamily(Font(R.font.lato_regular))
+                                    )
+                                )
+                            }
                         }
                     }
                 }

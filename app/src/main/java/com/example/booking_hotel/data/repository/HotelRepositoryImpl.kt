@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.example.booking_hotel.data.remote.HotelAPI
 import com.example.booking_hotel.data.remote.HotelPagingSource
 import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.domain.model.Rating
 import com.example.booking_hotel.domain.repository.HotelRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -23,5 +24,9 @@ class HotelRepositoryImpl(
                 )
             }
         ).flow
+    }
+
+    override suspend fun getListRating(hotelId: Long): List<Rating> {
+        return hotelAPI.getListRating(hotelId = hotelId)
     }
 }

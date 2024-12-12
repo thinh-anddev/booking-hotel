@@ -259,12 +259,12 @@ fun DetailScreen(
                         0 -> OverviewPage(
                             hotel = hotel,
                             navigateToWeb = {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
-                            context.startActivity(intent)
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                                context.startActivity(intent)
                             }
                         )
 
-                        1 -> RoomTypePage()
+                        1 -> RoomTypePage(hotel = hotel)
                         2 -> PolicyPage()
                         3 -> RatePage()
                     }
