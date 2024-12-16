@@ -263,10 +263,11 @@ fun DetailScreen(
                                 context.startActivity(intent)
                             }
                         )
-
                         1 -> RoomTypePage(hotel = hotel)
                         2 -> PolicyPage()
-                        3 -> RatePage()
+                        3 -> RatePage(
+                            hotel = hotel
+                        )
                     }
                 }
             }

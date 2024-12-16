@@ -29,4 +29,8 @@ class HotelRepositoryImpl(
     override suspend fun getListRating(hotelId: Long): List<Rating> {
         return hotelAPI.getListRating(hotelId = hotelId)
     }
+
+    override suspend fun getAvgRate(hotelId: Long): Double {
+        return hotelAPI.getAvgRating(hotelId = hotelId)
+    }
 }

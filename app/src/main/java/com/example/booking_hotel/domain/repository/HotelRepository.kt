@@ -14,4 +14,8 @@ interface HotelRepository {
     suspend fun getListRating(
         hotelId: Long
     ): List<Rating>
+
+    suspend fun getAvgRate(
+        hotelId: Long
+    ): Double
 }
