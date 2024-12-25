@@ -1,5 +1,7 @@
 package com.example.booking_hotel.presentation.navigator
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -32,6 +34,7 @@ import com.example.booking_hotel.presentation.ordered.OrderScreen
 import com.example.booking_hotel.presentation.search.SearchScreen
 import com.example.booking_hotel.presentation.search.SearchViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigatorScreen(
 
@@ -130,7 +133,14 @@ fun NavigatorScreen(
             composable(
                 route = Route.ExploreScreen.route
             ) {
-                ExploreScreen()
+                ExploreScreen(
+                    navigateToDetail = {hotel ->
+                        navigateToDetails(
+                            navController = navController,
+                            hotel = hotel
+                        )
+                    }
+                )
             }
             composable(
                 route = Route.OrderScreen.route

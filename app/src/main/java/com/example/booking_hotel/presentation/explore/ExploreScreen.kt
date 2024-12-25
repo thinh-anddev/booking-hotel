@@ -24,12 +24,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.booking_hotel.R
+import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.presentation.search.HotelList
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ExploreScreen(
     modifier: Modifier = Modifier,
+    navigateToDetail: (Hotel) -> Unit,
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
     val properties = viewModel.hotels.collectAsLazyPagingItems()
@@ -51,13 +53,19 @@ fun ExploreScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Khám phá", style = TextStyle(
-                    color = Color.White,
-                    fontFamily = FontFamily(Font(R.font.lato_bold)),
-                    fontSize = 24.sp
-                ))
+                Text(
+                    text = "Khám phá", style = TextStyle(
+                        color = Color.White,
+                        fontFamily = FontFamily(Font(R.font.lato_bold)),
+                        fontSize = 24.sp
+                    )
+                )
             }
-//            HotelList(properties = properties, modifier = Modifier.padding(top = 35.dp))
+            HotelList(
+                properties = properties,
+                modifier = Modifier.padding(top = 35.dp),
+                onClick = navigateToDetail
+            )
         }
     }
 }
