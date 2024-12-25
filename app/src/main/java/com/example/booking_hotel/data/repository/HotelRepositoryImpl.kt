@@ -33,4 +33,12 @@ class HotelRepositoryImpl(
     override suspend fun getAvgRate(hotelId: Long): Double {
         return hotelAPI.getAvgRating(hotelId = hotelId)
     }
+
+    override suspend fun getTotalRate(hotelId: Long): Int {
+        return hotelAPI.getTotalRate(hotelId = hotelId)
+    }
+
+    override suspend fun getCountStar(hotelId: Long): Map<Int, Int> {
+        return hotelAPI.getCountStar(hotelId)
+    }
 }
