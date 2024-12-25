@@ -18,4 +18,12 @@ interface HotelRepository {
     suspend fun getAvgRate(
         hotelId: Long
     ): Double
+
+    suspend fun getTotalRate(
+        hotelId: Long
+    ): Int
+
+    suspend fun getCountStar(
+        hotelId: Long
+    ): Map<Int, Int>
 }

@@ -25,4 +25,14 @@ interface HotelAPI {
     suspend fun getAvgRating(
         @Path("hotelId") hotelId: Long
     ): Double
+
+    @GET("${Constant.API_HOTEL}/{hotelId}/${Constant.TOTAL_RATE}")
+    suspend fun getTotalRate(
+        @Path("hotelId") hotelId: Long
+    ): Int
+
+    @GET("${Constant.API_HOTEL}/{hotelId}/${Constant.COUNT_STAR}")
+    suspend fun getCountStar(
+        @Path("hotelId") hotelId: Long
+    ): Map<Int, Int>
 }
