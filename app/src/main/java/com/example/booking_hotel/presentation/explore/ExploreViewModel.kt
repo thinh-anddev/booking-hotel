@@ -31,14 +31,14 @@ class ExploreViewModel @Inject constructor(
     var hotels: StateFlow<PagingData<Hotel>> = _hotels
 
     init {
-        setCurrentDate()
+        //setCurrentDate()
         getListHotelExplore()
     }
 
     private fun getListHotelExplore() {
         viewModelScope.launch {
             usecase.invoke(
-                query = "ho chi minh",
+                query = "quang ngai",
             ).cachedIn(viewModelScope).collect {
                     pagingData ->
                 _hotels.value = pagingData
