@@ -13,8 +13,4 @@ fun RoomTypePage(
     viewModel: PageViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    LaunchedEffect(key1 = true) {
-        val avgRate = viewModel.getAvgRating(hotel.id)
-        Log.d("tesst", avgRate.toString())
-    }
 }
