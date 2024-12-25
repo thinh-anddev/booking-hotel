@@ -5,15 +5,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -41,11 +44,11 @@ fun BottomButtonDetail(
             .padding(vertical = 15.dp)
             .padding(horizontal = 10.dp)
             .drawBehind {
-                val strokeWidth = 1.dp.toPx() // Width of the top border
+                val strokeWidth = 1.dp.toPx()
                 drawLine(
-                    color = Color.Gray, // Color of the top border
-                    start = Offset(0f, 0f), // Start point (top-left corner)
-                    end = Offset(size.width, 0f), // End point (top-right corner)
+                    color = Color.Gray,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
                     strokeWidth = strokeWidth
                 )
             }
@@ -93,5 +96,21 @@ fun BottomButtonDetail(
                 )
             )
         }
+        Box(
+            modifier = Modifier
+                .background(
+                    TextColor
+                )
+                .clip(RoundedCornerShape(5.dp))
+        ) {
+            Text(
+                text = "Đặt", style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontFamily(Font(R.font.lato_regular)),
+                    fontSize = 16.sp
+                ), modifier = Modifier.padding(horizontal = 32.dp, vertical = 10.dp)
+            )
+        }
+
     }
 }
