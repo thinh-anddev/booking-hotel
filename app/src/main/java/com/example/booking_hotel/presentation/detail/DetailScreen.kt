@@ -3,6 +3,8 @@ package com.example.booking_hotel.presentation.detail
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +26,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +50,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.model.Image
+import com.example.booking_hotel.helper.calculateNumberNightsFromString
+import com.example.booking_hotel.presentation.detail.components.BookingDialog
 import com.example.booking_hotel.presentation.detail.components.BottomButtonDetail
 import com.example.booking_hotel.presentation.detail.components.PageIndicatorDetail
 import com.example.booking_hotel.presentation.detail.page.OverviewPage
@@ -56,22 +64,49 @@ import com.example.booking_hotel.ui.theme.TextColor
 import com.example.booking_hotel.ui.theme.TitleColor
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    hotel: Hotel
+    hotel: Hotel,
+    checkInDate: String,
+    checkOutDate: String,
+    adult: String,
+    children: String
 ) {
+    var isShowDialog by remember { mutableStateOf(false) }
+    var priceOneNight = hotel.ratePerNight?.extractedLowest
+    val numberNight = calculateNumberNightsFromString(checkInDate, checkOutDate).toInt()
+    BookingDialog(
+        showDialog = isShowDialog,
+        adult = adult.toInt(),
+        children = children.toInt(),
+        numberNight = if (numberNight == 0) 1 else numberNight,
+        onDismiss = { isShowDialog = false },
+        onConfirm = { nights, adults, children ->
+            println("Số đêm: $nights, Người lớn: $adults, Trẻ em: $children")
+            navController.navigate(Route.ConfirmOrderScreen.passData(
+                checkInDate = checkInDate,
+                checkOutDate = checkOutDate,
+                numberNight = nights,
+                price = (priceOneNight!! * nights).toDouble()
+            ))
+        }
+    )
     Scaffold(
         modifier = modifier
             .fillMaxSize(),
         bottomBar = {
             BottomButtonDetail(
-                checkInDate = "1/8/2003",
-                numberNight = 3,
-                numberPeople = 4,
-                items = listBottomButtonDetail
+                checkInDate = checkInDate,
+                numberNight = if (numberNight == 0) 1 else numberNight,
+                numberPeople = adult.toInt() + children.toInt(),
+                items = listBottomButtonDetail,
+                order = {
+                    isShowDialog = true
+                }
             )
         }
     ) {
@@ -263,6 +298,7 @@ fun DetailScreen(
                                 context.startActivity(intent)
                             }
                         )
+
                         1 -> RoomTypePage(hotel = hotel)
                         2 -> PolicyPage()
                         3 -> RatePage(
@@ -273,34 +309,4 @@ fun DetailScreen(
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun SearchScreenPreview() {
-    val navController = rememberNavController()
-    val hotel = Hotel(
-        id = 1L,
-        type = "Hotel",
-        name = "Sample Hotel",
-        link = "https://example.com",
-        checkInTime = "14:00",
-        checkOutTime = "12:00",
-        hotelClass = "5-star",
-        extractedHotelClass = 5,
-        overallRating = 4.5,
-        reviews = 200,
-        locationRating = 4.0,
-        propertyToken = null,
-        serpapiPropertyDetailsLink = null,
-        gpsCoordinates = null,
-        ratePerNight = null,
-        amenities = null,
-        nearbyPlaces = null,
-        images = null,
-        ratings = null,
-        reviewsBreakdown = null
-    )
-    DetailScreen(navController = navController, hotel = hotel)
 }
