@@ -1,5 +1,7 @@
 package com.example.booking_hotel.presentation.navgraph
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -17,6 +19,7 @@ import com.example.booking_hotel.presentation.search.SearchScreen
 import com.example.booking_hotel.presentation.splash.SplashScreen
 import com.example.booking_hotel.presentation.splash.SplashViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(
     startDestination: String
@@ -50,19 +53,5 @@ fun NavGraph(
         ) {
             NavigatorScreen()
         }
-//        composable(
-//            route = Route.SearchScreen.route,
-//            arguments = listOf(
-//                navArgument("searchQuery") {
-//                    type = NavType.StringType
-//                }
-//            )
-//        ) {
-//            val searchQuery = it.arguments?.getString("searchQuery").toString()
-//            SearchScreen(
-//                navController = navController,
-//                searchQuery = searchQuery
-//            )
-//        }
     }
 }
