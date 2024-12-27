@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -36,7 +37,8 @@ fun BottomButtonDetail(
     numberNight: Int,
     numberPeople: Int,
     items: List<BottomButtonItem>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    order:() -> Unit
 ) {
     Row(
         modifier = modifier
@@ -102,6 +104,7 @@ fun BottomButtonDetail(
                     TextColor
                 )
                 .clip(RoundedCornerShape(5.dp))
+                .clickable { order() }
         ) {
             Text(
                 text = "Đặt", style = TextStyle(
@@ -111,6 +114,5 @@ fun BottomButtonDetail(
                 ), modifier = Modifier.padding(horizontal = 32.dp, vertical = 10.dp)
             )
         }
-
     }
 }
