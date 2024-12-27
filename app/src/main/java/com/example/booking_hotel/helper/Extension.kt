@@ -8,6 +8,8 @@ import android.view.WindowInsets
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 fun String.showToast(context: Context) {
@@ -29,3 +31,11 @@ fun HideSystemBar() {
                 )
     }
 }
+fun generateOrderCode(): String {
+    val currentTime = System.currentTimeMillis()
+    val dateFormat = SimpleDateFormat("yyyyMMddHHmmss")
+    val formattedTime = dateFormat.format(Date(currentTime))
+    val randomSuffix = (100..999).random()
+    return "ORD-$formattedTime-$randomSuffix"
+}
+
