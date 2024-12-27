@@ -15,7 +15,8 @@ import androidx.paging.cachedIn
 import androidx.paging.filter
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
-import com.example.booking_hotel.helper.DateUtils
+import com.example.booking_hotel.helper.convertMillisToLocalDate
+import com.example.booking_hotel.helper.dateToString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -75,10 +76,10 @@ class HomeViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun convertDateToString(isCheckIn: Boolean) {
-        val localDate = _selectedDateMillis.value?.let { DateUtils().convertMillisToLocalDate(it) }
+        val localDate = _selectedDateMillis.value?.let { convertMillisToLocalDate(it) }
         if (isCheckIn) {
-            _checkInDate.value = localDate?.let { DateUtils().dateToString(it) }.toString()
-        } else _checkOutDate.value = localDate?.let { DateUtils().dateToString(it) }.toString()
+            _checkInDate.value = localDate?.let { dateToString(it) }.toString()
+        } else _checkOutDate.value = localDate?.let { dateToString(it) }.toString()
     }
 
     fun onSearchChange(query: String) {

@@ -23,7 +23,10 @@ import androidx.navigation.navArgument
 import com.example.booking_hotel.R
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.helper.Constant
+import com.example.booking_hotel.helper.dateToString
+import com.example.booking_hotel.helper.getCurrentDate
 import com.example.booking_hotel.presentation.account.AccountScreen
+import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
 import com.example.booking_hotel.presentation.home.HomeScreen
@@ -133,11 +136,16 @@ fun NavigatorScreen(
             composable(
                 route = Route.ExploreScreen.route
             ) {
+                val currentDate = getCurrentDate()
                 ExploreScreen(
                     navigateToDetail = {hotel ->
                         navigateToDetails(
                             navController = navController,
-                            hotel = hotel
+                            hotel = hotel,
+                            checkInDate = dateToString(currentDate),
+                            checkOutDate = dateToString(currentDate),
+                            adult = "1",
+                            children = "1"
                         )
                     }
                 )
@@ -194,7 +202,11 @@ fun NavigatorScreen(
                     navigateToDetail = { property ->
                         navigateToDetails(
                             navController = navController,
-                            hotel = property
+                            hotel = property,
+                            checkInDate = checkInDate,
+                            checkOutDate = checkOutDate,
+                            adult = adult,
+                            children = children
                         )
                     }
                 )
@@ -202,14 +214,37 @@ fun NavigatorScreen(
             composable(
                 route = Route.DetailScreen.route
             ) {
+                val checkInDate = backStackState?.arguments?.getString("checkInDate").toString()
+                val checkOutDate = backStackState?.arguments?.getString("checkOutDate").toString()
+                val adult = backStackState?.arguments?.getString("adult").toString()
+                val children = backStackState?.arguments?.getString("children").toString()
                 navController.previousBackStackEntry?.savedStateHandle?.get<Hotel?>(Constant.PROPERTY)
                     ?.let {
                         property ->
                         DetailScreen(
                             hotel = property,
-                            navController = navController
+                            navController = navController,
+                            checkInDate = checkInDate,
+                            checkOutDate = checkOutDate,
+                            adult = adult,
+                            children = children
                         )
                     }
+            }
+            composable(
+                route = Route.ConfirmOrderScreen.route
+            ) {
+                val checkInDate = backStackState?.arguments?.getString("checkInDate").toString()
+                val checkOutDate = backStackState?.arguments?.getString("checkOutDate").toString()
+                val numberNight = backStackState?.arguments?.getString("numberNight")?.toInt()
+                val price = backStackState?.arguments?.getString("price")?.toDouble()
+                ConfirmOrderScreen(
+                    navController = navController,
+                    checkInDate = checkInDate,
+                    checkOutDate = checkOutDate,
+                    numberNight = numberNight!!,
+                    price = price!!
+                )
             }
         }
     }
@@ -230,9 +265,21 @@ fun navigateToTab(
     }
 }
 
-private fun navigateToDetails(navController: NavController, hotel: Hotel) {
+private fun navigateToDetails(
+    navController: NavController,
+    hotel: Hotel,
+    checkInDate: String,
+    checkOutDate: String,
+    adult: String,
+    children: String
+) {
     navController.currentBackStackEntry?.savedStateHandle?.set(Constant.PROPERTY, hotel)
     navController.navigate(
-        route = Route.DetailScreen.route
+        route = Route.DetailScreen.passData(
+            checkInDate = checkInDate,
+            checkOutDate = checkOutDate,
+            adult = adult,
+            children = children
+        )
     )
 }
