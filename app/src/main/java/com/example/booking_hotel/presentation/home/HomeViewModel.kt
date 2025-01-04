@@ -14,7 +14,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
 import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.domain.repository.UserRepository
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
+import com.example.booking_hotel.helper.SharedPreferencesHelper
 import com.example.booking_hotel.helper.convertMillisToLocalDate
 import com.example.booking_hotel.helper.dateToString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +32,9 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val searchHotelUsecase: SearchHotelUsecase
+    private val searchHotelUsecase: SearchHotelUsecase,
+    private val userRepository: UserRepository,
+    private val sharedPreferencesHelper: SharedPreferencesHelper
 ): ViewModel() {
 
     private val _searchQuery = mutableStateOf("")
@@ -50,10 +54,29 @@ class HomeViewModel @Inject constructor(
 
     private val _selectedDateMillis = MutableLiveData<Long>()
     val selectedDateMillis: LiveData<Long> get() = _selectedDateMillis
+    private var _avatar = MutableLiveData("")
+    val avatar: LiveData<String> = _avatar
 
-//    init {
-//        getListHotSearch()
-//    }
+    init {
+        initUser()
+    }
+    private fun initUser() {
+        if (sharedPreferencesHelper.isLogin()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val userId = sharedPreferencesHelper.getUserId()
+                val getUserResponse = userRepository.getUserById(userId)
+                Log.d("getUserResponse", getUserResponse.toString())
+                if (getUserResponse!!.message == "User found") {
+                    val user = getUserResponse!!.user
+                    _avatar.postValue(user!!.avatar)
+                } else {
+                    _avatar.postValue("")
+                }
+            }
+        } else {
+            _avatar.value = ""
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun setCurrentDate() {
