@@ -77,6 +77,7 @@ class RegisterViewModel @Inject constructor(
                     userName = _username.value,
                     password = _password.value,
                     email = _email.value,
+                    contact = _contact.value,
                     age = 30,
                     avatar = "",
                     dateCreated = ""
