@@ -1,16 +1,28 @@
 package com.example.booking_hotel.presentation.register
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.example.booking_hotel.domain.model.User
+import com.example.booking_hotel.domain.repository.UserRepository
+import com.example.booking_hotel.presentation.navgraph.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor() : ViewModel(){
+class RegisterViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel(){
+
+    private val _username = mutableStateOf("")
+    val username: State<String> = _username
 
     private val _email = mutableStateOf("")
     val email: State<String> = _email
@@ -27,6 +39,10 @@ class RegisterViewModel @Inject constructor() : ViewModel(){
     private val _errorMessage = mutableStateOf("")
     val errorMessage: State<String> = _errorMessage
 
+    fun onUsernameChange(username: String) {
+        _username.value = username
+    }
+
     fun onEmailChange(email: String) {
         _email.value = email
     }
@@ -39,18 +55,46 @@ class RegisterViewModel @Inject constructor() : ViewModel(){
         _password.value = password
     }
 
-    fun onConfirmPasswordChange(confirmnPassword: String) {
-        _confirmPassword.value = confirmnPassword
+    fun onConfirmPasswordChange(confirmPassword: String) {
+        _confirmPassword.value = confirmPassword
     }
 
-    fun register() {
-        viewModelScope.launch {
-            if (_email.value.isBlank() || _contact.value.isBlank() || _password.value.isBlank() || _confirmPassword.value.isBlank()) {
+    fun register(navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_email.value.isBlank()
+                || _contact.value.isBlank()
+                || _password.value.isBlank()
+                || _confirmPassword.value.isBlank()
+                || _username.value.isBlank()
+                ) {
                 _errorMessage.value = "Vui lòng nhập đầy đủ thông tin"
             } else if (_password.value != _confirmPassword.value) {
                 _errorMessage.value = "Mật khẩu không trùng khớp"
             } else if (_password.value.length <= 8 ) {
                 _errorMessage.value = "Hãy nhập mật khẩu dài hơn"
+            } else {
+                val user = User(
+                    userName = _username.value,
+                    password = _password.value,
+                    email = _email.value,
+                    age = 30,
+                    avatar = "",
+                    dateCreated = ""
+                )
+                val result = userRepository.registerUser(user)
+                if (result == "User registered successfully") {
+                    withContext(Dispatchers.Main) {
+                        _errorMessage.value = "Đăng ký thành công"
+                        navController.navigate(Route.LoginScreen.route) {
+                            popUpTo(0) { inclusive = false }
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Log.d("dddd", result)
+                        _errorMessage.value = result
+                    }
+                }
             }
         }
     }

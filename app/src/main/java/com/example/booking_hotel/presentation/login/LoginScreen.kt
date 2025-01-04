@@ -53,13 +53,13 @@ fun LoginScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val email by viewModel.email
+    val username by viewModel.username
     val password by viewModel.password
     val loginSuccess by viewModel.loginSuccess
     val errorMessage by viewModel.errorMessage
 
     var showErrors by remember { mutableStateOf(false) }
-    val errorEmail = showErrors && email.isBlank()
+    val errorEmail = showErrors && username.isBlank()
     val errorPassword = showErrors && password.isBlank()
 
     val context = LocalContext.current
@@ -101,9 +101,9 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(45.dp))
             InputText(
-                text = email,
-                onValueChange = { viewModel.onEmailChange(it) },
-                placeHolder = "Email",
+                text = username,
+                onValueChange = { viewModel.onUsernameChange(it) },
+                placeHolder = "Tên đăng nhập",
                 isPassword = false,
                 hasError = errorEmail
             )
@@ -131,11 +131,8 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(35.dp))
             TextButton(
                 onClick = {
-//                    showErrors = true
-//                    viewModel.login()
-                    navController.navigate(Route.NavigatorScreen.route) {
-                        popUpTo(0) { inclusive = true }
-                    }
+                    showErrors = true
+                    viewModel.login(navController)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

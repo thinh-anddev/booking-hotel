@@ -51,7 +51,7 @@ fun RegisterScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-
+    val username by viewModel.username
     val email by viewModel.email
     val contact by viewModel.contact
     val password by viewModel.password
@@ -60,6 +60,7 @@ fun RegisterScreen(
 
     var showErrors by remember { mutableStateOf(false) }
 
+    val errorUsername = showErrors && username.isBlank()
     val errorEmail = showErrors && email.isBlank()
     val errorContact = showErrors && contact.isBlank()
     val errorPassword = showErrors && password.isBlank()
@@ -97,6 +98,14 @@ fun RegisterScreen(
             )
             Spacer(modifier = Modifier.height(32.dp))
             InputText(
+                text = username,
+                onValueChange = { viewModel.onUsernameChange(it) },
+                placeHolder = "Username",
+                isPassword = false,
+                hasError = errorUsername
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            InputText(
                 text = email,
                 onValueChange = { viewModel.onEmailChange(it) },
                 placeHolder = "Email",
@@ -131,7 +140,7 @@ fun RegisterScreen(
             TextButton(
                 onClick = {
                     showErrors = true
-                    viewModel.register()
+                    viewModel.register(navController)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
