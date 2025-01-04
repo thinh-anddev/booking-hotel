@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.booking_hotel.R
 import com.example.booking_hotel.presentation.intro.components.IntroPage
@@ -41,8 +43,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun IntroScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: IntroViewModel = hiltViewModel()
 ) {
+    val isHaveUser by viewModel.isHaveUser.observeAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -95,8 +99,14 @@ fun IntroScreen(
                     modifier = Modifier.clickable {
                         scope.launch {
                             if (pageState.currentPage == 2) {
-                                navController.navigate(Route.RegisterScreen.route) {
-                                    popUpTo(Route.IntroScreen.route) {inclusive = true}
+                                if (isHaveUser == true) {
+                                    navController.navigate(Route.NavigatorScreen.route) {
+                                        popUpTo(Route.IntroScreen.route) {inclusive = true}
+                                    }
+                                } else {
+                                    navController.navigate(Route.RegisterScreen.route) {
+                                        popUpTo(Route.IntroScreen.route) {inclusive = true}
+                                    }
                                 }
                             } else {
                                 pageState.animateScrollToPage(page = pageState.currentPage + 1)
