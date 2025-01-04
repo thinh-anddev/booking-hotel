@@ -17,4 +17,6 @@ object Constant {
     const val AUTH = "api/auth"
     const val REGISTER = "register"
     const val LOGIN = "login"
+    //get user
+    const val GET_USER = "getUser"
 }
