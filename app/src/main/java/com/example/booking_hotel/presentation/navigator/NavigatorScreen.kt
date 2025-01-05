@@ -26,14 +26,19 @@ import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.dateToString
 import com.example.booking_hotel.helper.getCurrentDate
 import com.example.booking_hotel.presentation.account.AccountScreen
+import com.example.booking_hotel.presentation.account.change_information.ChangeInformationScreen
+import com.example.booking_hotel.presentation.account.change_password.ChangePasswordScreen
 import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
 import com.example.booking_hotel.presentation.home.HomeScreen
+import com.example.booking_hotel.presentation.intro.IntroScreen
+import com.example.booking_hotel.presentation.login.LoginScreen
 import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.presentation.navigator.components.BottomNavigator
 import com.example.booking_hotel.presentation.navigator.components.BottomNavigatorItem
 import com.example.booking_hotel.presentation.ordered.OrderScreen
+import com.example.booking_hotel.presentation.register.RegisterScreen
 import com.example.booking_hotel.presentation.search.SearchScreen
 import com.example.booking_hotel.presentation.search.SearchViewModel
 
@@ -134,6 +139,16 @@ fun NavigatorScreen(
                 HomeScreen(navController = navController)
             }
             composable(
+                route = Route.RegisterScreen.route
+            ) {
+                RegisterScreen(navController = navController)
+            }
+            composable(
+                route = Route.LoginScreen.route
+            ) {
+                LoginScreen(navController = navController)
+            }
+            composable(
                 route = Route.ExploreScreen.route
             ) {
                 val currentDate = getCurrentDate()
@@ -156,9 +171,24 @@ fun NavigatorScreen(
                 OrderScreen()
             }
             composable(
+                route = Route.IntroScreen.route
+            ) {
+                IntroScreen(navController)
+            }
+            composable(
                 route = Route.AccountScreen.route
             ) {
-                AccountScreen()
+                AccountScreen(navController = navController)
+            }
+            composable(
+                route = Route.ChangeInformationScreen.route
+            ) {
+                ChangeInformationScreen(navController = navController)
+            }
+            composable(
+                route = Route.ChangePasswordScreen.route
+            ) {
+                ChangePasswordScreen(navController = navController)
             }
             composable(
                 route = Route.NavigatorScreen.route

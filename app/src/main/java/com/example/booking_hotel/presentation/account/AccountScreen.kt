@@ -23,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -31,15 +32,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.booking_hotel.R
 import com.example.booking_hotel.presentation.account.component.FieldAccountItem
+import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.ui.theme.TextColor
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AccountScreen(
     modifier: Modifier = Modifier,
+    navController: NavController,
     viewModel: AccountViewModel = hiltViewModel()
 ) {
     Scaffold(
@@ -53,8 +58,6 @@ fun AccountScreen(
         val imagePickerLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
-            Log.d("zzzzz", uri.toString())
-            Log.d("zzzzz", avatar.toString())
             viewModel.onImageUriSelected(uri!!)
         }
         Column(
@@ -86,16 +89,25 @@ fun AccountScreen(
             ) {
                 val (avatarLayout, nameLayout, contactLayout) = createRefs()
                 avatar?.let {
-                    Image(
-                        painter = rememberAsyncImagePainter(it),
-                        contentDescription = null,
+                    Log.d("avatar", avatar.toString())
+                    Column(
                         modifier = Modifier
                             .size(55.dp)
                             .constrainAs(avatarLayout) {
                                 start.linkTo(parent.start)
                                 bottom.linkTo(parent.bottom)
                             }
-                    )
+
+                    ) {
+                        if (it != "") {
+                            Image(
+                                painter = rememberAsyncImagePainter(it),
+                                contentDescription = null
+                            )
+                        } else {
+                            Image(painter = painterResource(id = R.drawable.ic_profile), contentDescription = null)
+                        }
+                    }
                 }
                 Text(
                     text = name!!,
@@ -133,14 +145,18 @@ fun AccountScreen(
                 modifier = Modifier.padding(horizontal = 25.dp)
             ) {
                 FieldAccountItem(name = "Thay đổi thông tin", onClick = {
-                    imagePickerLauncher.launch("image/*")
+                    navController.navigate(Route.ChangeInformationScreen.route)
                 })
                 Spacer(modifier = Modifier.height(16.dp))
-                FieldAccountItem(name = "Đặt lại mật khẩu", onClick = {})
+                FieldAccountItem(name = "Đặt lại mật khẩu", onClick = {
+                    navController.navigate(Route.ChangePasswordScreen.route)
+                })
                 Spacer(modifier = Modifier.height(16.dp))
                 FieldAccountItem(name = "Liên hệ", onClick = {})
                 Spacer(modifier = Modifier.height(16.dp))
-                FieldAccountItem(name = "Đăng xuất", onClick = {})
+                FieldAccountItem(name = "Đăng xuất", onClick = {
+                    viewModel.logout(navController = navController)
+                })
             }
         }
     }
@@ -149,5 +165,6 @@ fun AccountScreen(
 @Preview(showBackground = true)
 @Composable
 fun AccountScreenPreview() {
-    AccountScreen()
+    val navController = rememberNavController()
+    AccountScreen(navController = navController)
 }

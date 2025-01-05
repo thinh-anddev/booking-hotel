@@ -12,6 +12,8 @@ sealed class Route(
     data object OrderScreen : Route("OrderScreen")
     data object AccountScreen : Route("AccountScreen")
     data object NavigatorScreen : Route("NavigatorScreen")
+    data object ChangeInformationScreen : Route("ChangeInformationScreen")
+    data object ChangePasswordScreen : Route("ChangePasswordScreen")
     data object ConfirmOrderScreen : Route("ConfirmOrderScreen/{checkInDate}/{checkOutDate}/{numberNight}/{price}") {
         fun passData(
             checkInDate: String,

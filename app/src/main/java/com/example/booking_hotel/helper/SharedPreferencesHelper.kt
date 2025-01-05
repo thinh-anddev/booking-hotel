@@ -29,6 +29,8 @@ class SharedPreferencesHelper @Inject constructor(
     }
     @SuppressLint("CommitPrefEdits")
     fun logout() {
-        sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, false)
+        sharedPreferences.edit()
+            .putBoolean(KEY_IS_LOGGED_IN, false)
+            .putLong(USER_ID, 1L).apply()
     }
 }

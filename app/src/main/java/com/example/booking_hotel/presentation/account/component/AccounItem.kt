@@ -2,9 +2,11 @@ package com.example.booking_hotel.presentation.account.component
 
 import android.widget.ImageView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +28,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.booking_hotel.R
+import com.example.booking_hotel.ui.theme.Color_986601
 import com.example.booking_hotel.ui.theme.Grey_1
 
 @Composable
@@ -71,4 +74,30 @@ fun GlideImage(
             }
         }
     )
+}
+
+@Composable
+fun ButtonChangeImage(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .background(Color_986601)
+            .clip(RoundedCornerShape(4.dp))
+            .clickable { onClick.invoke() },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = text, style = TextStyle(
+                color = Color.White,
+                fontFamily = FontFamily(Font(R.font.lato_regular)),
+                fontSize = 16.sp
+            ), modifier = Modifier
+                .padding(horizontal = 32.dp)
+                .padding(vertical = 16.dp)
+        )
+    }
 }
