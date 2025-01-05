@@ -17,8 +17,19 @@ object Constant {
     const val AUTH = "api/auth"
     const val REGISTER = "register"
     const val LOGIN = "login"
-    //get user
     const val GET_USER = "getUser"
     const val UPDATE_USER = "updateUser"
     const val CHANGE_PASSWORD = "changePassword"
+    //order
+    const val ORDER = "api/order"
+    const val SAVE_ORDER = "saveOrder"
+    const val GET_ORDER = "getOrder"
+    const val GET_LIST_ORDER = "getListOrder"
+    const val UPDATE_ORDER_STATUS = "updateOrderStatus"
+
+    //status order
+    const val PENDING = "PENDING"
+    const val PAID = "PAID"
+    const val CANCELED = "CANCELED"
+    const val CHECK_OUT = "CHECK_OUT"
 }

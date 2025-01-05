@@ -28,6 +28,7 @@ import com.example.booking_hotel.helper.getCurrentDate
 import com.example.booking_hotel.presentation.account.AccountScreen
 import com.example.booking_hotel.presentation.account.change_information.ChangeInformationScreen
 import com.example.booking_hotel.presentation.account.change_password.ChangePasswordScreen
+import com.example.booking_hotel.presentation.account.contact.ContactScreen
 import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
@@ -184,6 +185,11 @@ fun NavigatorScreen(
                 route = Route.ChangeInformationScreen.route
             ) {
                 ChangeInformationScreen(navController = navController)
+            }
+            composable(
+                route = Route.ContactScreen.route
+            ) {
+                ContactScreen(navController = navController)
             }
             composable(
                 route = Route.ChangePasswordScreen.route
