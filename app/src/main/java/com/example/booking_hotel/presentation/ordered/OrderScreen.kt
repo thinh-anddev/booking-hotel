@@ -70,7 +70,10 @@ fun OrderScreen(
                         order = order,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
+                            .padding(bottom = 8.dp),
+                        onClick = {newStatus ->
+                            order.id?.let { it1 -> viewModel.updateOrderStatus(it1, newStatus) }
+                        }
                     )
                 }
             }

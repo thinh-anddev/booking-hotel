@@ -25,7 +25,7 @@ fun OrderList(
         items(
             count = orderList.size
         ) {
-            ItemOrder(order = orderList[it])
+//            ItemOrder(order = orderList[it])
         }
     }
 }

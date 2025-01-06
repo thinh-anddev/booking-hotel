@@ -3,6 +3,7 @@ package com.example.booking_hotel.presentation.ordered.component
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,20 +45,30 @@ import coil.request.ImageRequest
 import com.example.booking_hotel.R
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.model.Order
+import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.formatDate
 import com.example.booking_hotel.presentation.ordered.OrderViewModel
 import com.example.booking_hotel.ui.theme.Color_986601
+import com.example.booking_hotel.ui.theme.ContentColor
 import com.example.booking_hotel.ui.theme.TextColor
 
 @Composable
 fun ItemOrder(
     order: Order,
     viewModel: OrderViewModel = hiltViewModel(),
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var hotel by remember { mutableStateOf<Hotel?>(null) }
+    val nameFunction by viewModel.nameFunction.observeAsState()
+    val backgroundFunction by viewModel.backgroundColor.observeAsState()
     val context = LocalContext.current
     val animate = hotel?.amenities
+    val newStatus = when (order.orderStatus) {
+        Constant.PENDING -> Constant.PAID
+        Constant.PAID -> Constant.CANCELED
+        else -> ""
+    }
 
     LaunchedEffect(order.hotelId) {
         try {
@@ -65,6 +77,10 @@ fun ItemOrder(
         } catch (e: Exception) {
             Log.e("ItemOrder", "Error fetching hotel: $e")
         }
+    }
+    LaunchedEffect(key1 = order.orderStatus) {
+        viewModel.syncDataBackground(order.orderStatus)
+        viewModel.syncDataStatus(order.orderStatus)
     }
     Column(
         modifier = modifier
@@ -211,12 +227,15 @@ fun ItemOrder(
                 .height(50.dp)
                 .width(150.dp)
                 .align(Alignment.End)
-                .background(TextColor)
-                .clip(RoundedCornerShape(10.dp)),
+                .background(backgroundFunction!!)
+                .clip(RoundedCornerShape(10.dp))
+                .clickable {
+                    onClick.invoke(newStatus)
+                },
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Xác nhận", style = TextStyle(
+                text = nameFunction!!, style = TextStyle(
                     fontFamily = FontFamily(Font(R.font.lato_bold)),
                     fontSize = 16.sp,
                     color = Color.White
