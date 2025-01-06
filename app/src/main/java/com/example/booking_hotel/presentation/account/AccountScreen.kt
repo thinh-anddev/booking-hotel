@@ -156,6 +156,10 @@ fun AccountScreen(
                     navController.navigate(Route.ContactScreen.route)
                 })
                 Spacer(modifier = Modifier.height(16.dp))
+                FieldAccountItem(name = "Tạo QR đăng nhập nhanh", onClick = {
+                    navController.navigate(Route.QRCodeScreen.route)
+                })
+                Spacer(modifier = Modifier.height(16.dp))
                 FieldAccountItem(name = "Đăng xuất", onClick = {
                     viewModel.logout(navController = navController)
                 })

@@ -14,6 +14,7 @@ import com.example.booking_hotel.presentation.home.HomeScreen
 import com.example.booking_hotel.presentation.intro.IntroScreen
 import com.example.booking_hotel.presentation.login.LoginScreen
 import com.example.booking_hotel.presentation.navigator.NavigatorScreen
+import com.example.booking_hotel.presentation.qrcode_scanner.QRCodeScanner
 import com.example.booking_hotel.presentation.register.RegisterScreen
 import com.example.booking_hotel.presentation.search.SearchScreen
 import com.example.booking_hotel.presentation.splash.SplashScreen
@@ -47,6 +48,11 @@ fun NavGraph(
             route = Route.LoginScreen.route
         ) {
             LoginScreen(navController = navController)
+        }
+        composable(
+            route = Route.QRCodeScanner.route
+        ) {
+            QRCodeScanner(navController = navController)
         }
         composable(
             route = Route.NavigatorScreen.route

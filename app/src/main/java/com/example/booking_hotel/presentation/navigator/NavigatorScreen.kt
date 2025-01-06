@@ -29,6 +29,7 @@ import com.example.booking_hotel.presentation.account.AccountScreen
 import com.example.booking_hotel.presentation.account.change_information.ChangeInformationScreen
 import com.example.booking_hotel.presentation.account.change_password.ChangePasswordScreen
 import com.example.booking_hotel.presentation.account.contact.ContactScreen
+import com.example.booking_hotel.presentation.account.qrcode.QRCodeScreen
 import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
@@ -39,6 +40,7 @@ import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.presentation.navigator.components.BottomNavigator
 import com.example.booking_hotel.presentation.navigator.components.BottomNavigatorItem
 import com.example.booking_hotel.presentation.ordered.OrderScreen
+import com.example.booking_hotel.presentation.qrcode_scanner.QRCodeScanner
 import com.example.booking_hotel.presentation.register.RegisterScreen
 import com.example.booking_hotel.presentation.search.SearchScreen
 import com.example.booking_hotel.presentation.search.SearchViewModel
@@ -190,6 +192,16 @@ fun NavigatorScreen(
                 route = Route.ContactScreen.route
             ) {
                 ContactScreen(navController = navController)
+            }
+            composable(
+                route = Route.QRCodeScanner.route
+            ) {
+                QRCodeScanner(navController = navController)
+            }
+            composable(
+                route = Route.QRCodeScreen.route
+            ) {
+                QRCodeScreen()
             }
             composable(
                 route = Route.ChangePasswordScreen.route

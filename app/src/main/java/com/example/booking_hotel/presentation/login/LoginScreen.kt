@@ -20,12 +20,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.InspectableModifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,6 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
 import com.example.booking_hotel.helper.ToastText
+import com.example.booking_hotel.helper.saveBitmapToGallery
 import com.example.booking_hotel.helper.showToast
 import com.example.booking_hotel.presentation.login.components.ButtonOtherLogin
 import com.example.booking_hotel.presentation.navgraph.Route
@@ -57,6 +60,7 @@ fun LoginScreen(
     val password by viewModel.password
     val loginSuccess by viewModel.loginSuccess
     val errorMessage by viewModel.errorMessage
+    val qrBitmap by viewModel.qrBitmap.observeAsState()
 
     var showErrors by remember { mutableStateOf(false) }
     val errorEmail = showErrors && username.isBlank()
@@ -160,9 +164,9 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(25.dp))
             ButtonOtherLogin(
-                methodImage = R.drawable.ic_facebook,
+                methodImage = R.drawable.ic_qrcode,
                 onClick = {
-                    ToastText.PENDING_FUNCTION.showToast(context)
+                    navController.navigate(Route.QRCodeScanner.route)
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))

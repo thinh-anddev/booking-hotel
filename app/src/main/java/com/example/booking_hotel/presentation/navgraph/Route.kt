@@ -9,6 +9,8 @@ sealed class Route(
     data object LoginScreen : Route("LoginScreen")
     data object HomeScreen : Route("HomeScreen")
     data object ExploreScreen : Route("ExploreScreen")
+    data object QRCodeScanner : Route("QRCodeScanner")
+    data object QRCodeScreen : Route("QRCodeScreen")
     data object OrderScreen : Route("OrderScreen")
     data object AccountScreen : Route("AccountScreen")
     data object NavigatorScreen : Route("NavigatorScreen")
