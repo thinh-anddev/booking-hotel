@@ -274,12 +274,16 @@ fun NavigatorScreen(
                 val checkOutDate = backStackState?.arguments?.getString("checkOutDate").toString()
                 val numberNight = backStackState?.arguments?.getString("numberNight")?.toInt()
                 val price = backStackState?.arguments?.getString("price")?.toDouble()
+                val numberPeople = backStackState?.arguments?.getString("numberPeople")?.toInt()
+                val hotelId = backStackState?.arguments?.getString("hotelId")?.toLong()
                 ConfirmOrderScreen(
                     navController = navController,
                     checkInDate = checkInDate,
                     checkOutDate = checkOutDate,
                     numberNight = numberNight!!,
-                    price = price!!
+                    price = price!!,
+                    numberPeople = numberPeople!!,
+                    hotelId = hotelId!!
                 )
             }
         }

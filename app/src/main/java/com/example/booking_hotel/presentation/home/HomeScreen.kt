@@ -40,12 +40,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -59,6 +61,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.rememberAsyncImagePainter
 import com.example.booking_hotel.R
 import com.example.booking_hotel.helper.HideSystemBar
 import com.example.booking_hotel.helper.ToastText.LESS_INFORMATION
@@ -86,6 +89,7 @@ fun HomeScreen(
     val searchQuery by viewModel.searchQuery
     val children by viewModel.children
     val adult by viewModel.adult
+    val avatarz by viewModel.avatar.observeAsState()
 
     var showDialogCheckIn by remember { mutableStateOf(false) }
     var showDialogCheckOut by remember { mutableStateOf(false) }
@@ -196,16 +200,26 @@ fun HomeScreen(
                         start.linkTo(parent.start)
                     }
                 )
-
-                Image(
-                    painterResource(id = R.drawable.avatar_test),
-                    contentDescription = null,
-                    modifier = Modifier.constrainAs(avatar) {
-                        end.linkTo(parent.end)
-                        top.linkTo(title.top)
-                        bottom.linkTo(content.bottom)
+                Box(modifier = Modifier.constrainAs(avatar) {
+                    end.linkTo(parent.end)
+                    top.linkTo(title.top)
+                    bottom.linkTo(content.bottom)
+                }) {
+                    avatarz?.let {
+                        if (it != "") {
+                            Image(
+                                painter = rememberAsyncImagePainter(it),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Image(
+                                painterResource(id = R.drawable.ic_profile),
+                                contentDescription = null
+                            )
+                        }
                     }
-                )
+                }
             }
             Spacer(modifier = Modifier.height(30.dp))
             SearchBar(

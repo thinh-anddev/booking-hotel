@@ -27,12 +27,17 @@ class OrderRepositoryImpl(
     }
 
     override suspend fun getListOrder(userId: Long): GetListOrderResponse? {
-        val response = orderAPI.getListOrder(userId)
-        return if (response.isSuccessful) {
-            response.body()
-        } else {
-            val errorBody = response.errorBody()?.string()
-            throw Exception(errorBody ?: "Unknown error occurred")
+        return try {
+            val response = orderAPI.getListOrder(userId)
+            if (response.isSuccessful) {
+                response.body()
+            } else {
+                val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                GetListOrderResponse(message = errorBody, orderList = emptyList())
+            }
+        } catch (e: Exception) {
+            val errorMessage = e.message ?: "Unknown exception"
+            GetListOrderResponse(message = errorMessage, orderList = emptyList())
         }
     }
 

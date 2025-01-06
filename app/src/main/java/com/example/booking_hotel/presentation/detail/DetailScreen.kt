@@ -91,7 +91,9 @@ fun DetailScreen(
                 checkInDate = checkInDate,
                 checkOutDate = checkOutDate,
                 numberNight = nights,
-                price = (priceOneNight!! * nights).toDouble()
+                price = (priceOneNight!! * nights).toDouble(),
+                numberPeople = (adults + children),
+                hotelId = hotel.id
             ))
         }
     )

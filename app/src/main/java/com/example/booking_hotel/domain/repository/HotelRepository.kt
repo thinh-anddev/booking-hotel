@@ -26,4 +26,7 @@ interface HotelRepository {
     suspend fun getCountStar(
         hotelId: Long
     ): Map<Int, Int>
+    suspend fun getHotelById(
+        hotelId: Long
+    ): Hotel
 }

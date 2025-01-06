@@ -4,12 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.domain.model.Order
+import com.example.booking_hotel.domain.repository.OrderRepository
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
+import com.example.booking_hotel.helper.SharedPreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +26,9 @@ import javax.inject.Inject
 @SuppressLint("NewApi")
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
-    private val usecase: SearchHotelUsecase
+    private val usecase: SearchHotelUsecase,
+    private val orderRepository: OrderRepository,
+    private val sharedPreferencesHelper: SharedPreferencesHelper
 ): ViewModel() {
 
     private val _checkInDate = mutableStateOf("")
@@ -29,9 +36,17 @@ class ExploreViewModel @Inject constructor(
 
     private val _hotels = MutableStateFlow<PagingData<Hotel>>(PagingData.empty())
     var hotels: StateFlow<PagingData<Hotel>> = _hotels
+    private var _listOrder = MutableLiveData<List<Order>>(emptyList())
+    val listOrder: LiveData<List<Order>> = _listOrder
+    private fun getListOrder() {
+        viewModelScope.launch {
+            val listOrder = orderRepository.getListOrder(sharedPreferencesHelper.getUserId())
+            _listOrder.value = listOrder?.orderList ?: emptyList()
+        }
+    }
 
     init {
-        //setCurrentDate()
+        getListOrder()
         getListHotelExplore()
     }
 

@@ -41,4 +41,9 @@ class HotelRepositoryImpl(
     override suspend fun getCountStar(hotelId: Long): Map<Int, Int> {
         return hotelAPI.getCountStar(hotelId)
     }
+
+    override suspend fun getHotelById(hotelId: Long): Hotel {
+        val response = hotelAPI.getHotelById(hotelId)
+        return response.body()!!
+    }
 }

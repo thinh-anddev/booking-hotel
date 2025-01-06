@@ -152,7 +152,9 @@ fun AccountScreen(
                     navController.navigate(Route.ChangePasswordScreen.route)
                 })
                 Spacer(modifier = Modifier.height(16.dp))
-                FieldAccountItem(name = "Liên hệ", onClick = {})
+                FieldAccountItem(name = "Liên hệ", onClick = {
+                    navController.navigate(Route.ContactScreen.route)
+                })
                 Spacer(modifier = Modifier.height(16.dp))
                 FieldAccountItem(name = "Đăng xuất", onClick = {
                     viewModel.logout(navController = navController)

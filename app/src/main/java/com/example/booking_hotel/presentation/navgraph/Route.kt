@@ -15,14 +15,16 @@ sealed class Route(
     data object ChangeInformationScreen : Route("ChangeInformationScreen")
     data object ChangePasswordScreen : Route("ChangePasswordScreen")
     data object ContactScreen : Route("ContactScreen")
-    data object ConfirmOrderScreen : Route("ConfirmOrderScreen/{checkInDate}/{checkOutDate}/{numberNight}/{price}") {
+    data object ConfirmOrderScreen : Route("ConfirmOrderScreen/{checkInDate}/{checkOutDate}/{numberNight}/{price}/{numberPeople}/{hotelId}") {
         fun passData(
             checkInDate: String,
             checkOutDate: String,
             numberNight: Int,
-            price: Double
+            price: Double,
+            numberPeople: Int,
+            hotelId: Long
         ): String {
-            return "ConfirmOrderScreen/$checkInDate/$checkOutDate/$numberNight/$price"
+            return "ConfirmOrderScreen/$checkInDate/$checkOutDate/$numberNight/$price/$numberPeople/$hotelId"
         }
     }
     data object DetailScreen : Route("DetailScreen/{checkInDate}/{checkOutDate}/{adult}/{children}") {

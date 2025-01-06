@@ -39,6 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
@@ -56,6 +57,9 @@ fun ConfirmOrderScreen(
     checkOutDate: String,
     numberNight: Int,
     price: Double,
+    numberPeople: Int,
+    hotelId: Long,
+    viewModel: ConfirmOrderViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     val genOrderCode = generateOrderCode()
@@ -240,6 +244,28 @@ fun ConfirmOrderScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
+                        text = "Số người: ",
+                        style = TextStyle(
+                            color = Color.Black,
+                            fontFamily = FontFamily(Font(R.font.lato_regular)),
+                            fontSize = 16.sp
+                        )
+                    )
+                    Text(
+                        text = "$numberPeople",
+                        style = TextStyle(
+                            color = Color.Black,
+                            fontFamily = FontFamily(Font(R.font.lato_regular)),
+                            fontSize = 16.sp
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
                         text = "Tổng: ",
                         style = TextStyle(
                             color = Color.Black,
@@ -348,7 +374,17 @@ fun ConfirmOrderScreen(
                 }
                 Spacer(modifier = Modifier.height(40.dp))
                 TextButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        viewModel.saveOrder(
+                            hotelId = hotelId,
+                            orderEmail = email,
+                            orderContact = phone,
+                            orderName = name,
+                            orderCode = genOrderCode,
+                            totalPrice = price,
+                            numberPeople = numberPeople
+                        )
+                    },
                     modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
@@ -367,14 +403,4 @@ fun ConfirmOrderScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ConfirmOrderScreenPreview() {
-    var navController = rememberNavController()
-    ConfirmOrderScreen(
-        navController,
-        "asd", "asda", 1, 0.0
-    )
 }

@@ -1,7 +1,9 @@
 package com.example.booking_hotel.helper
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -59,4 +61,14 @@ fun calculateNumberNightsFromString(checkInDateString: String, checkOutDateStrin
     val checkInDate = parseStringToLocalDate(checkInDateString)
     val checkOutDate = parseStringToLocalDate(checkOutDateString)
     return ChronoUnit.DAYS.between(checkInDate, checkOutDate)
+}
+fun formatDate(input: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    return try {
+        val date = inputFormat.parse(input)
+        outputFormat.format(date ?: "")
+    } catch (e: Exception) {
+        "Invalid date format: ${e.message}"
+    }
 }
