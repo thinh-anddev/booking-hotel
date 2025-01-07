@@ -41,4 +41,8 @@ interface UserAPI {
         @Path("id") id: Long,
         @Body changePasswordRequest: ChangePasswordRequest
     ): Response<String>
+    @POST("${Constant.AUTH}/${Constant.FORGOT_PASSWORD}")
+    suspend fun forgotPassword(
+        @Query("email") email: String
+    ): Response<String>
 }

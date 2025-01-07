@@ -64,4 +64,14 @@ class UserRepositoryImpl(
             errorBody
         }
     }
+
+    override suspend fun forgotPassword(email: String): String {
+        val response = userAPI.forgotPassword(email)
+        return if (response.isSuccessful) {
+            response.body() ?: "successfully"
+        } else {
+            val errorBody = response.errorBody()?.string() ?: "unknown error"
+            errorBody
+        }
+    }
 }

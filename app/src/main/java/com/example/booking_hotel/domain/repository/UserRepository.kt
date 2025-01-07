@@ -24,4 +24,7 @@ interface UserRepository {
         id: Long,
         changePasswordRequest: ChangePasswordRequest
     ): String
+    suspend fun forgotPassword(
+        email: String
+    ): String
 }

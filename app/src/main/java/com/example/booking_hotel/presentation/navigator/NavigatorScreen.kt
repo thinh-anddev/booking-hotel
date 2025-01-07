@@ -33,6 +33,7 @@ import com.example.booking_hotel.presentation.account.qrcode.QRCodeScreen
 import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
+import com.example.booking_hotel.presentation.forgot_password.ForgotPasswordScreen
 import com.example.booking_hotel.presentation.home.HomeScreen
 import com.example.booking_hotel.presentation.intro.IntroScreen
 import com.example.booking_hotel.presentation.login.LoginScreen
@@ -202,6 +203,11 @@ fun NavigatorScreen(
                 route = Route.QRCodeScreen.route
             ) {
                 QRCodeScreen()
+            }
+            composable(
+                route = Route.ForgotPasswordScreen.route
+            ) {
+                ForgotPasswordScreen(navController = navController)
             }
             composable(
                 route = Route.ChangePasswordScreen.route

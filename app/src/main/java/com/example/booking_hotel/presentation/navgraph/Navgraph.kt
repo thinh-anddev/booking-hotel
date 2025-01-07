@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.booking_hotel.presentation.forgot_password.ForgotPasswordScreen
 import com.example.booking_hotel.presentation.home.HomeScreen
 import com.example.booking_hotel.presentation.intro.IntroScreen
 import com.example.booking_hotel.presentation.login.LoginScreen
@@ -53,6 +54,11 @@ fun NavGraph(
             route = Route.QRCodeScanner.route
         ) {
             QRCodeScanner(navController = navController)
+        }
+        composable(
+            route = Route.ForgotPasswordScreen.route
+        ) {
+            ForgotPasswordScreen(navController = navController)
         }
         composable(
             route = Route.NavigatorScreen.route

@@ -129,7 +129,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .align(Alignment.End)
                     .clickable {
-                        ToastText.PENDING_FUNCTION.showToast(context)
+                        navController.navigate(Route.ForgotPasswordScreen.route)
                     }
             )
             Spacer(modifier = Modifier.height(35.dp))
