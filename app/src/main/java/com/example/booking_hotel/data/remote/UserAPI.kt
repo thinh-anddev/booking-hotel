@@ -3,6 +3,7 @@ package com.example.booking_hotel.data.remote
 import com.example.booking_hotel.data.remote.dto.ChangePasswordRequest
 import com.example.booking_hotel.data.remote.dto.GetUserResponse
 import com.example.booking_hotel.data.remote.dto.LoginResponse
+import com.example.booking_hotel.data.remote.dto.SendOTPResponse
 import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.helper.Constant
@@ -45,4 +46,8 @@ interface UserAPI {
     suspend fun forgotPassword(
         @Query("email") email: String
     ): Response<String>
+    @POST("${Constant.AUTH}/${Constant.SEND_OTP}")
+    suspend fun sendOtp(
+        @Body user: User
+    ): Response<SendOTPResponse>
 }

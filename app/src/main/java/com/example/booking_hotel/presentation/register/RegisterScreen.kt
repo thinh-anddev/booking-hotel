@@ -140,7 +140,8 @@ fun RegisterScreen(
             TextButton(
                 onClick = {
                     showErrors = true
-                    viewModel.register(navController)
+                    //viewModel.register(navController)
+                    viewModel.sendOTP(navController)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

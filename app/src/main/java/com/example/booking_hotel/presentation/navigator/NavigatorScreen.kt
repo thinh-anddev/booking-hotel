@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.booking_hotel.R
 import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.dateToString
 import com.example.booking_hotel.helper.getCurrentDate
@@ -43,8 +44,10 @@ import com.example.booking_hotel.presentation.navigator.components.BottomNavigat
 import com.example.booking_hotel.presentation.ordered.OrderScreen
 import com.example.booking_hotel.presentation.qrcode_scanner.QRCodeScanner
 import com.example.booking_hotel.presentation.register.RegisterScreen
+import com.example.booking_hotel.presentation.register.confirm_otp.ConfirmOTPScreen
 import com.example.booking_hotel.presentation.search.SearchScreen
 import com.example.booking_hotel.presentation.search.SearchViewModel
+import com.google.gson.Gson
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -157,7 +160,7 @@ fun NavigatorScreen(
             ) {
                 val currentDate = getCurrentDate()
                 ExploreScreen(
-                    navigateToDetail = {hotel ->
+                    navigateToDetail = { hotel ->
                         navigateToDetails(
                             navController = navController,
                             hotel = hotel,
@@ -266,6 +269,14 @@ fun NavigatorScreen(
                 )
             }
             composable(
+                route = Route.ConFirmOTPScreen.route
+            ) {
+                val otpCode = backStackState?.arguments?.getString("otpCode").toString()
+                val jsonUser = backStackState?.arguments?.getString("user").toString()
+                val user = Gson().fromJson(jsonUser, User::class.java)
+                ConfirmOTPScreen(navController = navController, otpCode = otpCode, user = user)
+            }
+            composable(
                 route = Route.DetailScreen.route
             ) {
                 val checkInDate = backStackState?.arguments?.getString("checkInDate").toString()
@@ -273,8 +284,7 @@ fun NavigatorScreen(
                 val adult = backStackState?.arguments?.getString("adult").toString()
                 val children = backStackState?.arguments?.getString("children").toString()
                 navController.previousBackStackEntry?.savedStateHandle?.get<Hotel?>(Constant.PROPERTY)
-                    ?.let {
-                        property ->
+                    ?.let { property ->
                         DetailScreen(
                             hotel = property,
                             navController = navController,

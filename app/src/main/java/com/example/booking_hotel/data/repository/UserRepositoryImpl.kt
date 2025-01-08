@@ -6,13 +6,14 @@ import com.example.booking_hotel.data.remote.UserAPI
 import com.example.booking_hotel.data.remote.dto.ChangePasswordRequest
 import com.example.booking_hotel.data.remote.dto.GetUserResponse
 import com.example.booking_hotel.data.remote.dto.LoginResponse
+import com.example.booking_hotel.data.remote.dto.SendOTPResponse
 import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.domain.repository.UserRepository
 
 class UserRepositoryImpl(
     private val userAPI: UserAPI
-): UserRepository {
+) : UserRepository {
     override suspend fun registerUser(user: User): String {
         return try {
             val response = userAPI.registerUser(user)
@@ -25,6 +26,7 @@ class UserRepositoryImpl(
             "Error: ${e.message}"
         }
     }
+
     @Override
     override suspend fun login(username: String, password: String): LoginResponse? {
         val response = userAPI.login(username = username, password = password)
@@ -72,6 +74,16 @@ class UserRepositoryImpl(
         } else {
             val errorBody = response.errorBody()?.string() ?: "unknown error"
             errorBody
+        }
+    }
+
+    override suspend fun sendOTP(user: User): SendOTPResponse? {
+        val response = userAPI.sendOtp(user)
+        return if (response.isSuccessful) {
+            response.body()
+        } else {
+            val errorBody = response.errorBody()?.string()
+            throw Exception(errorBody ?: "Unknown error occurred")
         }
     }
 }

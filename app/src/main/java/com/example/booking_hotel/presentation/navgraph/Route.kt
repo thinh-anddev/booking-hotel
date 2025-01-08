@@ -12,13 +12,20 @@ sealed class Route(
     data object QRCodeScanner : Route("QRCodeScanner")
     data object QRCodeScreen : Route("QRCodeScreen")
     data object ForgotPasswordScreen : Route("ForgotPasswordScreen")
+    data object ConFirmOTPScreen : Route("ConFirmOTPScreen/{otpCode}/{user}") {
+        fun passData(otpCode: String, user: String): String {
+            return "ConFirmOTPScreen/${otpCode}/${user}"
+        }
+    }
+
     data object OrderScreen : Route("OrderScreen")
     data object AccountScreen : Route("AccountScreen")
     data object NavigatorScreen : Route("NavigatorScreen")
     data object ChangeInformationScreen : Route("ChangeInformationScreen")
     data object ChangePasswordScreen : Route("ChangePasswordScreen")
     data object ContactScreen : Route("ContactScreen")
-    data object ConfirmOrderScreen : Route("ConfirmOrderScreen/{checkInDate}/{checkOutDate}/{numberNight}/{price}/{numberPeople}/{hotelId}") {
+    data object ConfirmOrderScreen :
+        Route("ConfirmOrderScreen/{checkInDate}/{checkOutDate}/{numberNight}/{price}/{numberPeople}/{hotelId}") {
         fun passData(
             checkInDate: String,
             checkOutDate: String,
@@ -30,7 +37,9 @@ sealed class Route(
             return "ConfirmOrderScreen/$checkInDate/$checkOutDate/$numberNight/$price/$numberPeople/$hotelId"
         }
     }
-    data object DetailScreen : Route("DetailScreen/{checkInDate}/{checkOutDate}/{adult}/{children}") {
+
+    data object DetailScreen :
+        Route("DetailScreen/{checkInDate}/{checkOutDate}/{adult}/{children}") {
         fun passData(
             checkInDate: String,
             checkOutDate: String,
@@ -40,7 +49,9 @@ sealed class Route(
             return "DetailScreen/$checkInDate/$checkOutDate/$adult/$children"
         }
     }
-    data object SearchScreen : Route("SearchScreen/{searchQuery}/{checkInDate}/{checkOutDate}/{adult}/{children}") {
+
+    data object SearchScreen :
+        Route("SearchScreen/{searchQuery}/{checkInDate}/{checkOutDate}/{adult}/{children}") {
         fun passData(
             searchQuery: String,
             checkInDate: String,
