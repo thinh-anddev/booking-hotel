@@ -1,6 +1,7 @@
 package com.example.booking_hotel.presentation.confirm_order
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -66,6 +68,7 @@ fun ConfirmOrderScreen(
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    val context = LocalContext.current
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -382,8 +385,10 @@ fun ConfirmOrderScreen(
                             orderName = name,
                             orderCode = genOrderCode,
                             totalPrice = price,
-                            numberPeople = numberPeople
+                            numberPeople = numberPeople,
+                            navController = navController
                         )
+                        Toast.makeText(context, "Đơn hàng của bạn đã được xử lí", Toast.LENGTH_SHORT).show()
                     },
                     modifier
                         .fillMaxWidth()

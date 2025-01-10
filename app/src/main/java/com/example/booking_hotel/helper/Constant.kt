@@ -2,7 +2,7 @@ package com.example.booking_hotel.helper
 
 object Constant {
     //emulator (check ipconfig)
-    const val BASE_URL = "http://192.168.5.172:8081/"
+    const val BASE_URL = "http://10.50.224.139:8081/"
     const val PROPERTY = "PROPERTY"
 
     //search hotel

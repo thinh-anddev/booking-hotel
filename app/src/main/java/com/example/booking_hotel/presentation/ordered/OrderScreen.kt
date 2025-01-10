@@ -13,8 +13,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.booking_hotel.R
+import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.presentation.ordered.component.ItemOrder
 import com.example.booking_hotel.presentation.ordered.component.OrderList
 
@@ -71,8 +75,10 @@ fun OrderScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp),
-                        onClick = {newStatus ->
-                            order.id?.let { it1 -> viewModel.updateOrderStatus(it1, newStatus) }
+                        onClick = { newStatus ->
+                            order.id?.let { it1 ->
+                                viewModel.updateOrderStatus(it1, newStatus)
+                            }
                         }
                     )
                 }

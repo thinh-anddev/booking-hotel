@@ -3,10 +3,12 @@ package com.example.booking_hotel.presentation.confirm_order
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.booking_hotel.domain.model.Order
 import com.example.booking_hotel.domain.repository.OrderRepository
 import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.SharedPreferencesHelper
+import com.example.booking_hotel.presentation.navgraph.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +17,7 @@ import javax.inject.Inject
 class ConfirmOrderViewModel @Inject constructor(
     private val orderRepository: OrderRepository,
     private val sharedPreferencesHelper: SharedPreferencesHelper
-): ViewModel() {
+) : ViewModel() {
     fun saveOrder(
         hotelId: Long,
         orderCode: String,
@@ -23,7 +25,8 @@ class ConfirmOrderViewModel @Inject constructor(
         totalPrice: Double,
         orderContact: String,
         orderEmail: String,
-        orderName: String
+        orderName: String,
+        navController: NavController
     ) {
         viewModelScope.launch {
             val order = Order(
@@ -39,6 +42,11 @@ class ConfirmOrderViewModel @Inject constructor(
                 orderEmail = orderEmail
             )
             orderRepository.saveOrder(order)
+            navController.navigate(Route.NavigatorScreen.route) {
+                popUpTo(0) {
+                    inclusive = true
+                }
+            }
             Log.d("saveOrder", order.toString())
         }
     }
