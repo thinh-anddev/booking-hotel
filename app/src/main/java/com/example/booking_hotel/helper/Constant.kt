@@ -29,6 +29,9 @@ object Constant {
     const val GET_ORDER = "getOrder"
     const val GET_LIST_ORDER = "getListOrder"
     const val UPDATE_ORDER_STATUS = "updateOrderStatus"
+    //revenue
+    const val REVENUE="api/revenue"
+    const val GET_REVENUE_BY_MONTH="getRevenueByMonth"
 
     //status order
     const val PENDING = "PENDING"
