@@ -49,13 +49,6 @@ class OrderViewModel @Inject constructor(
             else -> ""
         }
         _nameFunction.value = name
-//        val backgroundFunction = when (order.orderStatus) {
-//            Constant.PENDING -> TextColor
-//            Constant.CANCELED -> ContentColor
-//            Constant.CHECK_OUT -> Color_986601
-//            Constant.PAID -> Color_986601
-//            else -> TextColor
-//        }
     }
     fun syncDataBackground(status: String) {
         val backgroundFunction = when (status) {

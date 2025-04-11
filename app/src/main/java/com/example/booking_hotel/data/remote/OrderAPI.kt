@@ -29,5 +29,4 @@ interface OrderAPI {
         @Path("id") id: Long,
         @Query("status") status: String
     ): Response<String>
-
 }
