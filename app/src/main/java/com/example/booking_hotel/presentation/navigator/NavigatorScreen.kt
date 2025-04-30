@@ -31,6 +31,7 @@ import com.example.booking_hotel.presentation.account.change_information.ChangeI
 import com.example.booking_hotel.presentation.account.change_password.ChangePasswordScreen
 import com.example.booking_hotel.presentation.account.contact.ContactScreen
 import com.example.booking_hotel.presentation.account.qrcode.QRCodeScreen
+import com.example.booking_hotel.presentation.admin.AdminScreen
 import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
 import com.example.booking_hotel.presentation.explore.ExploreScreen
@@ -313,6 +314,11 @@ fun NavigatorScreen(
                     numberPeople = numberPeople!!,
                     hotelId = hotelId!!
                 )
+            }
+            composable(
+                route=Route.AdminScreen.route
+            ) {
+                AdminScreen(navController=navController)
             }
         }
     }

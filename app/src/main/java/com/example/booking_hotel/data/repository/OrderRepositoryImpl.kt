@@ -2,6 +2,7 @@ package com.example.booking_hotel.data.repository
 
 import com.example.booking_hotel.data.remote.OrderAPI
 import com.example.booking_hotel.data.remote.dto.GetListOrderResponse
+import com.example.booking_hotel.data.remote.dto.HotelStat
 import com.example.booking_hotel.domain.model.Order
 import com.example.booking_hotel.domain.repository.OrderRepository
 
@@ -46,6 +47,26 @@ class OrderRepositoryImpl(
         return if (response.isSuccessful) {
             response.body()
         } else {
+            val errorBody = response.errorBody()?.string()
+            throw Exception(errorBody ?: "Unknown error occurred")
+        }
+    }
+
+    override suspend fun getAllHotelStat(): List<HotelStat> {
+        val response=orderAPI.getAllHotelStat()
+        return if(response.isSuccessful){
+            response.body()!!
+        }else{
+            val errorBody = response.errorBody()?.string()
+            throw Exception(errorBody ?: "Unknown error occurred")
+        }
+    }
+
+    override suspend fun getTop10HotelStat(): List<HotelStat> {
+        val response=orderAPI.getTop10HotelStat()
+        return if(response.isSuccessful){
+            response.body()!!
+        }else{
             val errorBody = response.errorBody()?.string()
             throw Exception(errorBody ?: "Unknown error occurred")
         }

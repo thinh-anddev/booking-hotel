@@ -1,6 +1,7 @@
 package com.example.booking_hotel.domain.repository
 
 import androidx.paging.PagingData
+import com.example.booking_hotel.data.remote.dto.HotelStat
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.model.Rating
 import kotlinx.coroutines.flow.Flow

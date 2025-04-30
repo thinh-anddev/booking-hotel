@@ -1,6 +1,7 @@
 package com.example.booking_hotel.data.remote
 
 import com.example.booking_hotel.data.remote.dto.GetListOrderResponse
+import com.example.booking_hotel.data.remote.dto.HotelStat
 import com.example.booking_hotel.domain.model.Order
 import com.example.booking_hotel.helper.Constant
 import retrofit2.Response
@@ -29,4 +30,8 @@ interface OrderAPI {
         @Path("id") id: Long,
         @Query("status") status: String
     ): Response<String>
+    @GET("${Constant.ORDER}/${Constant.GET_ALL_HOTEL_STAT}")
+    suspend fun getAllHotelStat():Response<List<HotelStat>>
+    @GET("${Constant.ORDER}/${Constant.GET_TOP_10_HOTEL_STAT}")
+    suspend fun getTop10HotelStat():Response<List<HotelStat>>
 }

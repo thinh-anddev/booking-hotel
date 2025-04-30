@@ -146,4 +146,12 @@ dependencies {
 //
 //    // Zxing
     implementation 'com.google.zxing:core:3.3.0'
+
+    //chart
+// Core library
+    implementation "com.patrykandpatrick.vico:core:1.13.0"
+
+// Compose support
+    implementation "com.patrykandpatrick.vico:compose:1.13.0"
+    implementation "com.patrykandpatrick.vico:compose-m3:1.13.0"
 }

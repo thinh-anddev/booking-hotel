@@ -173,6 +173,9 @@ fun HomeScreen(
                     .padding(horizontal = 20.dp)
                     .padding(top = 50.dp)
                     .padding(bottom = 20.dp)
+                    .clickable {
+                        navController.navigate(Route.AdminScreen.route)
+                    }
             ) {
                 val (title, content, avatar) = createRefs()
                 Text(

@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.booking_hotel.domain.model.User
+import com.example.booking_hotel.presentation.admin.AdminScreen
 import com.example.booking_hotel.presentation.forgot_password.ForgotPasswordScreen
 import com.example.booking_hotel.presentation.home.HomeScreen
 import com.example.booking_hotel.presentation.intro.IntroScreen

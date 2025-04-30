@@ -1,5 +1,6 @@
 package com.example.booking_hotel.presentation.admin
 
+import HotelBookingBarChart
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,17 +28,21 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
 import com.example.booking_hotel.ui.theme.Grey_1
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AdminScreen(
     navController: NavController,
-    modifier:Modifier=Modifier
+    modifier:Modifier=Modifier,
+    viewModel: AdminViewModel=hiltViewModel()
 ){
+    val listTop10Hotel by viewModel.listTop10HotelStat.observeAsState()
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -66,7 +73,9 @@ fun AdminScreen(
             }
             Spacer(modifier = Modifier.height(20.dp))
             Column(
-                modifier=Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+                modifier= Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
             ) {
                 Column(
                     modifier= Modifier
@@ -86,7 +95,7 @@ fun AdminScreen(
                         )
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-
+                    HotelBookingBarChart(stats = listTop10Hotel?: emptyList())
                 }
             }
         }
