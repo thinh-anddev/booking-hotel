@@ -30,4 +30,5 @@ interface HotelRepository {
     suspend fun getHotelById(
         hotelId: Long
     ): Hotel
+    suspend fun getAllHotel():List<Hotel>
 }

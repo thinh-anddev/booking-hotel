@@ -11,6 +11,7 @@ import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import androidx.compose.ui.graphics.Color
+import com.example.booking_hotel.presentation.admin.HotelStatDTO
 import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.component.marker.markerComponent
 import com.patrykandpatrick.vico.compose.component.shapeComponent
@@ -18,7 +19,7 @@ import com.patrykandpatrick.vico.compose.component.shapeComponent
 @Composable
 fun HotelBookingBarChart(
     modifier: Modifier = Modifier,
-    stats: List<HotelStat>
+    stats: List<HotelStatDTO>
 ) {
     val chartEntries = stats.mapIndexed { index, stat ->
         FloatEntry(index.toFloat(), stat.totalOrder.toFloat())
@@ -41,7 +42,7 @@ fun HotelBookingBarChart(
         startAxis = rememberStartAxis(),
         bottomAxis = rememberBottomAxis(
             valueFormatter = { x, _ ->
-                stats.getOrNull(x.toInt())?.hotelId.toString() ?: ""
+                stats.getOrNull(x.toInt())?.hotel?.name ?: ""
             }
         ),
         marker = marker,

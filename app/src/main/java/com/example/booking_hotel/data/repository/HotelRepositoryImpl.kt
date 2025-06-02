@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 class HotelRepositoryImpl(
     private val hotelAPI: HotelAPI
 ): HotelRepository {
-
     override fun searchHotels(query: String): Flow<PagingData<Hotel>> {
         return Pager(
             config = PagingConfig(pageSize = 10),
@@ -45,5 +44,9 @@ class HotelRepositoryImpl(
     override suspend fun getHotelById(hotelId: Long): Hotel {
         val response = hotelAPI.getHotelById(hotelId)
         return response.body()!!
+    }
+
+    override suspend fun getAllHotel(): List<Hotel> {
+        return hotelAPI.getALlHotel()
     }
 }

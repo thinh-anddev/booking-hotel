@@ -1,9 +1,7 @@
-package com.example.booking_hotel.presentation.admin
+package com.example.booking_hotel.presentation.admin.revenue
 
-import HotelBookingBarChart
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,31 +22,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
-import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.presentation.admin.AdminViewModel
 import com.example.booking_hotel.presentation.admin.components.ButtonFunction
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AdminScreen(
-    navController: NavController,
-    modifier:Modifier=Modifier,
-    viewModel: AdminViewModel=hiltViewModel()
-){
-    val listTop10Hotel by viewModel.listTop10HotelStat.observeAsState()
+fun RevenueScreen(
+    modifier: Modifier = Modifier,
+    viewModel: AdminViewModel = hiltViewModel()
+) {
+    val listHotel by viewModel.listHotel.observeAsState()
     Scaffold(
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
         Column(
-            modifier= Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF9F9F9))
         ) {
@@ -62,7 +56,7 @@ fun AdminScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "Trang Quản lí",
+                    text = "Danh sách khách sạn",
                     style = TextStyle(
                         color = Color.White,
                         fontFamily = FontFamily(Font(R.font.lato_bold)),
@@ -85,30 +79,8 @@ fun AdminScreen(
                         .clip(RoundedCornerShape(8.dp)),
                     horizontalAlignment = Alignment.Start
                 ){
-                    Text(
-                        text = "Top 10 khách sạn có doanh thu cao nhất tháng",
-                        style = TextStyle(
-                            color = Color.Black,
-                            fontFamily = FontFamily(Font(R.font.lato_regular)),
-                            fontSize = 17.sp
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    HotelBookingBarChart(stats = listTop10Hotel?: emptyList())
-                }
-                Spacer(modifier = Modifier.height(15.dp))
-                ButtonFunction(functionName ="Xem thống kê doanh thu của khách sạn"
-                ,modifier=Modifier.height(60.dp)) {
-
                 }
             }
         }
     }
-}
-data class HotelStatDTO(val hotel:Hotel,val totalOrder:Int)
-@Preview(showBackground = true)
-@Composable
-fun AdminScreenPreview() {
-    val navController = rememberNavController()
-    AdminScreen(navController = navController)
 }

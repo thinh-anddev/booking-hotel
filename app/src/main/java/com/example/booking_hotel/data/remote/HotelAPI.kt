@@ -18,9 +18,13 @@ interface HotelAPI {
     ): List<Hotel>
 
     @GET("${Constant.API_HOTEL}/{hotelId}/${RATINGS}")
+
     suspend fun getListRating(
         @Path("hotelId") hotelId: Long
     ): List<Rating>
+
+    @GET("${Constant.API_HOTEL}/${Constant.GET_ALL_HOTEL}")
+    suspend fun getALlHotel():List<Hotel>
 
     @GET("${Constant.API_HOTEL}/{hotelId}/${AVGRATE}")
     suspend fun getAvgRating(
@@ -36,6 +40,7 @@ interface HotelAPI {
     suspend fun getCountStar(
         @Path("hotelId") hotelId: Long
     ): Map<Int, Int>
+
     @GET("${Constant.API_HOTEL}/${Constant.GET_HOTEL}/{id}")
     suspend fun getHotelById(
         @Path("id") id: Long
