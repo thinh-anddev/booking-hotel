@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.booking_hotel.data.remote.dto.HotelStat
+import com.example.booking_hotel.data.remote.dto.RevenueResponse
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.repository.HotelRepository
 import com.example.booking_hotel.domain.repository.OrderRepository
@@ -22,13 +23,18 @@ class AdminViewModel @Inject constructor(
     val listTop10HotelStat:LiveData<List<HotelStatDTO>> =_listTop10HotelStat
     private var _listHotel=MutableLiveData<List<Hotel>>(emptyList())
     val listHotel:LiveData<List<Hotel>> =_listHotel
+    private var _mostBookedHotel= MutableLiveData<HotelStatDTO>()
+    val mostBookedHotel:LiveData<HotelStatDTO> = _mostBookedHotel
+    private val _selectedRevenue = MutableLiveData<RevenueResponse?>()
+    val selectedRevenue: LiveData<RevenueResponse?> = _selectedRevenue
     init {
         getAllHotel()
         getAllHotelStat()
+        //getMostBookHotel()
     }
     private fun getAllHotelStat() {
         viewModelScope.launch {
-            val stats = orderRepository.getAllHotelStat()
+            val stats = orderRepository.getTop10HotelStat()
             val fullStats = stats.mapNotNull { stat ->
                 val hotel = hotelRepository.getHotelById(stat.hotelId)
                 hotel?.let {
@@ -41,6 +47,25 @@ class AdminViewModel @Inject constructor(
     private fun getAllHotel(){
         viewModelScope.launch {
             _listHotel.value=hotelRepository.getAllHotel()
+        }
+    }
+    private fun getMostBookHotel(){
+        viewModelScope.launch {
+            val mostBook=orderRepository.getMostBookHotel()
+            val hotel = hotelRepository.getHotelById(mostBook.hotelId)
+            hotel.let {
+                _mostBookedHotel.value= HotelStatDTO(hotel = it, totalOrder = mostBook.totalOrder)
+            }
+        }
+    }
+    fun fetchRevenue(hotelId: Long, month: Int, year: Int) {
+        viewModelScope.launch {
+            try {
+                val response = orderRepository.getMonthlyRevenue(year, hotelId, month)
+                _selectedRevenue.value=response
+            } catch (e: Exception) {
+                _selectedRevenue.value = null
+            }
         }
     }
 }

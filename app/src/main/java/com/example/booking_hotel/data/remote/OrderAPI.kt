@@ -2,6 +2,7 @@ package com.example.booking_hotel.data.remote
 
 import com.example.booking_hotel.data.remote.dto.GetListOrderResponse
 import com.example.booking_hotel.data.remote.dto.HotelStat
+import com.example.booking_hotel.data.remote.dto.RevenueResponse
 import com.example.booking_hotel.domain.model.Order
 import com.example.booking_hotel.helper.Constant
 import retrofit2.Response
@@ -34,4 +35,12 @@ interface OrderAPI {
     suspend fun getAllHotelStat():Response<List<HotelStat>>
     @GET("${Constant.ORDER}/${Constant.GET_TOP_10_HOTEL_STAT}")
     suspend fun getTop10HotelStat():Response<List<HotelStat>>
+    @GET("${Constant.ORDER}/most-booked")
+    suspend fun getMostBookHotel():Response<HotelStat>
+    @GET("${Constant.REVENUE}/getRevenueByMonth/{hotelId}")
+    suspend fun getMonthlyRevenue(
+        @Path("hotelId") hotelId: Long,
+        @Query("month") month:Int,
+        @Query("year") year:Int
+    ):Response<RevenueResponse>
 }

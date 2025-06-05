@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavGraph
+import com.example.booking_hotel.helper.HideSystemBar
 import com.example.booking_hotel.presentation.navgraph.NavGraph
 import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.ui.theme.BookinghotelTheme
@@ -39,6 +40,7 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
             //Add fillMaxSize()
+            HideSystemBar()
             Box(modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize()) {

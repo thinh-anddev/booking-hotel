@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.booking_hotel.R
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.presentation.admin.components.ButtonFunction
+import com.example.booking_hotel.presentation.navgraph.Route
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -42,6 +43,7 @@ fun AdminScreen(
     viewModel: AdminViewModel=hiltViewModel()
 ){
     val listTop10Hotel by viewModel.listTop10HotelStat.observeAsState()
+    val mostBook by viewModel.mostBookedHotel.observeAsState()
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -86,7 +88,7 @@ fun AdminScreen(
                     horizontalAlignment = Alignment.Start
                 ){
                     Text(
-                        text = "Top 10 khách sạn có doanh thu cao nhất tháng",
+                        text = "Top 10 khách sạn được đặt nhiều nhất tháng",
                         style = TextStyle(
                             color = Color.Black,
                             fontFamily = FontFamily(Font(R.font.lato_regular)),
@@ -96,10 +98,19 @@ fun AdminScreen(
                     Spacer(modifier = Modifier.height(5.dp))
                     HotelBookingBarChart(stats = listTop10Hotel?: emptyList())
                 }
+                Spacer(modifier = Modifier.height(10.dp))
+//                Text(
+//                    text = "Khách sạn được đặt nhiều nhất là ${mostBook!!.hotel.name} với ${mostBook!!.totalOrder} lượt đặt trên nền tảng" ,
+//                    style = TextStyle(
+//                        color = Color.Black,
+//                        fontFamily = FontFamily(Font(R.font.lato_regular)),
+//                        fontSize = 17.sp
+//                    )
+//                )
                 Spacer(modifier = Modifier.height(15.dp))
                 ButtonFunction(functionName ="Xem thống kê doanh thu của khách sạn"
                 ,modifier=Modifier.height(60.dp)) {
-
+                    navController.navigate(Route.RevenueScreen.route)
                 }
             }
         }
