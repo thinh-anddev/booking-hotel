@@ -1,5 +1,7 @@
 package com.example.booking_hotel.presentation.admin
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,15 +11,19 @@ import com.example.booking_hotel.data.remote.dto.HotelStat
 import com.example.booking_hotel.data.remote.dto.RevenueResponse
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.repository.HotelRepository
+import com.example.booking_hotel.domain.repository.ImageRepository
 import com.example.booking_hotel.domain.repository.OrderRepository
+import com.example.booking_hotel.helper.prepareFilePart
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
     private val orderRepository: OrderRepository,
-    private val hotelRepository: HotelRepository
+    private val hotelRepository: HotelRepository,
+    private val imageRepository:ImageRepository
 ):ViewModel() {
     private var _listTop10HotelStat=MutableLiveData<List<HotelStatDTO>>(emptyList())
     val listTop10HotelStat:LiveData<List<HotelStatDTO>> =_listTop10HotelStat
@@ -65,6 +71,16 @@ class AdminViewModel @Inject constructor(
                 _selectedRevenue.value=response
             } catch (e: Exception) {
                 _selectedRevenue.value = null
+            }
+        }
+    }
+    fun uploadImage(file: File) {
+        viewModelScope.launch {
+            try {
+                val response = imageRepository.uploadImage(file)
+                Log.d("AvatarURL", response.url)
+            } catch (e: Exception) {
+                Log.e("UploadError", e.message ?: "Unknown error")
             }
         }
     }

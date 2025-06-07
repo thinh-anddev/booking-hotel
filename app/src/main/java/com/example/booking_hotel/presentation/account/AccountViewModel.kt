@@ -1,5 +1,6 @@
 package com.example.booking_hotel.presentation.account
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,8 +14,11 @@ import com.example.booking_hotel.data.remote.dto.ChangePasswordRequest
 import com.example.booking_hotel.data.remote.dto.GetUserResponse
 import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
+import com.example.booking_hotel.domain.repository.ImageRepository
 import com.example.booking_hotel.domain.repository.UserRepository
+import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.SharedPreferencesHelper
+import com.example.booking_hotel.helper.uriToFile
 import com.example.booking_hotel.presentation.navgraph.Route
 import com.example.booking_hotel.presentation.splash.SplashScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +31,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val imageRepository: ImageRepository,
 ): ViewModel() {
     private var _name = MutableLiveData("")
     val name: LiveData<String> = _name
@@ -50,6 +55,9 @@ class AccountViewModel @Inject constructor(
     private var _avatar = MutableLiveData("")
     val avatar: LiveData<String> = _avatar
 
+    private var _avatarDisplay= MutableLiveData("")
+    val avatarDisplay:LiveData<String> = _avatarDisplay
+
     private var _errorValue = MutableLiveData("")
     val errorValue: LiveData<String> = _errorValue
     init {
@@ -59,7 +67,7 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             if (sharedPreferencesHelper.isLogin()) {
                 val user = getUserById()
-                _avatar.value = user!!.avatar
+                _avatarDisplay.value = "${Constant.BASE_URL}${user!!.avatar}"
                 _name.value = user.userName
                 _contact.value = user.contact
                 _email.value = user.email
@@ -82,8 +90,11 @@ class AccountViewModel @Inject constructor(
             }
         }
     }
-    fun updateUser(navController: NavController) {
+    fun updateUser(navController: NavController,context:Context) {
         viewModelScope.launch {
+            val file = uriToFile(Uri.parse(_avatar.value) , context)
+            val result = imageRepository.uploadImage(file)
+            _avatar.value = result.url
             val updateUserRequest = UpdateUserRequest(
                 contact = _contact.value!!,
                 email = _email.value!!,

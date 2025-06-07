@@ -23,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -47,6 +48,7 @@ fun AccountScreen(
     navController: NavController,
     viewModel: AccountViewModel = hiltViewModel()
 ) {
+    val context= LocalContext.current
     Scaffold(
         modifier = modifier
             .fillMaxSize()
@@ -54,7 +56,7 @@ fun AccountScreen(
     ) {
         val name by viewModel.name.observeAsState()
         val contact by viewModel.contact.observeAsState()
-        val avatar by viewModel.avatar.observeAsState()
+        val avatarDisplay by viewModel.avatarDisplay.observeAsState()
         val imagePickerLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
@@ -88,8 +90,8 @@ fun AccountScreen(
                     .padding(horizontal = 25.dp)
             ) {
                 val (avatarLayout, nameLayout, contactLayout) = createRefs()
-                avatar?.let {
-                    Log.d("avatar", avatar.toString())
+                avatarDisplay?.let {
+                    Log.d("avatar", avatarDisplay.toString())
                     Column(
                         modifier = Modifier
                             .size(55.dp)

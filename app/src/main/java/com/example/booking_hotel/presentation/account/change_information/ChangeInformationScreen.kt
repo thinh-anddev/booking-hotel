@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -62,6 +63,7 @@ fun ChangeInformationScreen(
     val avatar by viewModel.avatar.observeAsState()
     val contact by viewModel.contact.observeAsState()
     val email by viewModel.email.observeAsState()
+    val context = LocalContext.current
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -155,7 +157,7 @@ fun ChangeInformationScreen(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     InputText(
-                        text = contact!!,
+                        text = contact?:"null",
                         onValueChange = { viewModel.onContactChange(it) },
                         placeHolder = "SDT",
                         isPassword = false,
@@ -186,7 +188,7 @@ fun ChangeInformationScreen(
                         .clip(RoundedCornerShape(4.dp))
                         .background(TextColor)
                         .clickable {
-                            viewModel.updateUser(navController)
+                            viewModel.updateUser(navController,context)
                         },
                     contentAlignment = Alignment.Center
                 ) {
