@@ -1,6 +1,7 @@
 package com.example.booking_hotel.domain.repository
 
 import androidx.paging.PagingData
+import com.example.booking_hotel.data.remote.dto.HotelDTO
 import com.example.booking_hotel.data.remote.dto.HotelStat
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.model.Rating
@@ -31,4 +32,5 @@ interface HotelRepository {
         hotelId: Long
     ): Hotel
     suspend fun getAllHotel():List<Hotel>
+    suspend fun createHotel(hotel: HotelDTO): HotelDTO
 }

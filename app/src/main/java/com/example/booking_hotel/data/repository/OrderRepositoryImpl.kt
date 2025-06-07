@@ -1,5 +1,6 @@
 package com.example.booking_hotel.data.repository
 
+import android.util.Log
 import com.example.booking_hotel.data.remote.OrderAPI
 import com.example.booking_hotel.data.remote.dto.GetListOrderResponse
 import com.example.booking_hotel.data.remote.dto.HotelStat
@@ -66,11 +67,12 @@ class OrderRepositoryImpl(
     override suspend fun getTop10HotelStat(): List<HotelStat> {
         val response=orderAPI.getTop10HotelStat()
         return if(response.isSuccessful){
-            response.body()!!
+            response.body()?: throw Exception("Response body is null")
         }else{
             val errorBody = response.errorBody()?.string()
             throw Exception(errorBody ?: "Unknown error occurred")
         }
+        Log.d("OrderRepository", "Response code: ${response.code()}, message: ${response.message()}")
     }
 
     override suspend fun getMostBookHotel(): HotelStat {

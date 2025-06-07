@@ -112,6 +112,11 @@ fun AdminScreen(
                 ,modifier=Modifier.height(60.dp)) {
                     navController.navigate(Route.RevenueScreen.route)
                 }
+                Spacer(modifier = Modifier.height(5.dp))
+                ButtonFunction(functionName ="Thêm khách sạn mới"
+                    ,modifier=Modifier.height(60.dp)) {
+                    navController.navigate(Route.AddHotelScreen.route)
+                }
             }
         }
     }

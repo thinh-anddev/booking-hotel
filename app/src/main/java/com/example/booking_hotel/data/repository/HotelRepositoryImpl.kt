@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.booking_hotel.data.remote.HotelAPI
 import com.example.booking_hotel.data.remote.HotelPagingSource
+import com.example.booking_hotel.data.remote.dto.HotelDTO
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.model.Rating
 import com.example.booking_hotel.domain.repository.HotelRepository
@@ -48,5 +49,10 @@ class HotelRepositoryImpl(
 
     override suspend fun getAllHotel(): List<Hotel> {
         return hotelAPI.getALlHotel()
+    }
+
+    override suspend fun createHotel(hotel: HotelDTO): HotelDTO {
+        val response = hotelAPI.createHotel(hotel)
+        return response.body()!!
     }
 }

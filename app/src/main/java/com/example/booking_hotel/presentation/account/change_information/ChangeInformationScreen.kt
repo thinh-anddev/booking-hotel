@@ -60,7 +60,7 @@ fun ChangeInformationScreen(
     viewModel: AccountViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val avatar by viewModel.avatar.observeAsState()
+    val avatar by viewModel.avatarDisplay.observeAsState()
     val contact by viewModel.contact.observeAsState()
     val email by viewModel.email.observeAsState()
     val context = LocalContext.current

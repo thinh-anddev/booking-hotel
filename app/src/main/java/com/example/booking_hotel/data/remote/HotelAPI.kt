@@ -1,5 +1,6 @@
 package com.example.booking_hotel.data.remote
 
+import com.example.booking_hotel.data.remote.dto.HotelDTO
 import com.example.booking_hotel.data.remote.dto.HotelResponse
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.model.Rating
@@ -7,7 +8,9 @@ import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.Constant.AVGRATE
 import com.example.booking_hotel.helper.Constant.RATINGS
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -45,4 +48,6 @@ interface HotelAPI {
     suspend fun getHotelById(
         @Path("id") id: Long
     ): Response<Hotel>
+    @POST("${Constant.API_HOTEL}/add")
+    suspend fun createHotel(@Body hotel: HotelDTO): Response<HotelDTO>
 }

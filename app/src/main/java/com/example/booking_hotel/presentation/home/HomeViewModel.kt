@@ -16,6 +16,7 @@ import androidx.paging.filter
 import com.example.booking_hotel.domain.model.Hotel
 import com.example.booking_hotel.domain.repository.UserRepository
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
+import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.helper.SharedPreferencesHelper
 import com.example.booking_hotel.helper.convertMillisToLocalDate
 import com.example.booking_hotel.helper.dateToString
@@ -68,7 +69,7 @@ class HomeViewModel @Inject constructor(
                 Log.d("getUserResponse", getUserResponse.toString())
                 if (getUserResponse!!.message == "User found") {
                     val user = getUserResponse!!.user
-                    _avatar.postValue(user!!.avatar)
+                    _avatar.postValue("${Constant.BASE_URL}${user!!.avatar}")
                 } else {
                     _avatar.postValue("")
                 }

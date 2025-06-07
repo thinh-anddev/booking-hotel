@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.booking_hotel.data.remote.dto.HotelDTO
 import com.example.booking_hotel.data.remote.dto.HotelStat
 import com.example.booking_hotel.data.remote.dto.RevenueResponse
 import com.example.booking_hotel.domain.model.Hotel
@@ -14,10 +15,12 @@ import com.example.booking_hotel.domain.repository.HotelRepository
 import com.example.booking_hotel.domain.repository.ImageRepository
 import com.example.booking_hotel.domain.repository.OrderRepository
 import com.example.booking_hotel.helper.prepareFilePart
+import com.example.booking_hotel.helper.uriToFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
@@ -81,6 +84,15 @@ class AdminViewModel @Inject constructor(
                 Log.d("AvatarURL", response.url)
             } catch (e: Exception) {
                 Log.e("UploadError", e.message ?: "Unknown error")
+            }
+        }
+    }
+    fun addHotel(hotelDto: HotelDTO, context: Context) {
+        viewModelScope.launch {
+            hotelRepository.createHotel(hotelDto)
+            if (hotelDto.images?.isNotEmpty() == true) {
+                val file = uriToFile(hotelDto.images!![0].originalImage.toUri(), context)
+                imageRepository.uploadImage(file)
             }
         }
     }
