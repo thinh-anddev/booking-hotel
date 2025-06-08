@@ -21,12 +21,15 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 import androidx.core.net.toUri
+import com.example.booking_hotel.domain.model.User
+import com.example.booking_hotel.domain.repository.UserRepository
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
     private val orderRepository: OrderRepository,
     private val hotelRepository: HotelRepository,
-    private val imageRepository:ImageRepository
+    private val imageRepository:ImageRepository,
+    private val userRepository: UserRepository
 ):ViewModel() {
     private var _listTop10HotelStat=MutableLiveData<List<HotelStatDTO>>(emptyList())
     val listTop10HotelStat:LiveData<List<HotelStatDTO>> =_listTop10HotelStat
@@ -36,10 +39,13 @@ class AdminViewModel @Inject constructor(
     val mostBookedHotel:LiveData<HotelStatDTO> = _mostBookedHotel
     private val _selectedRevenue = MutableLiveData<RevenueResponse?>()
     val selectedRevenue: LiveData<RevenueResponse?> = _selectedRevenue
+    private var _listUser=MutableLiveData<List<User>>(emptyList())
+    val listUser:LiveData<List<User>> = _listUser
     init {
         getAllHotel()
         getAllHotelStat()
         //getMostBookHotel()
+        findAllUser()
     }
     private fun getAllHotelStat() {
         viewModelScope.launch {
@@ -77,16 +83,6 @@ class AdminViewModel @Inject constructor(
             }
         }
     }
-    fun uploadImage(file: File) {
-        viewModelScope.launch {
-            try {
-                val response = imageRepository.uploadImage(file)
-                Log.d("AvatarURL", response.url)
-            } catch (e: Exception) {
-                Log.e("UploadError", e.message ?: "Unknown error")
-            }
-        }
-    }
     fun addHotel(hotelDto: HotelDTO, context: Context) {
         viewModelScope.launch {
             hotelRepository.createHotel(hotelDto)
@@ -94,6 +90,11 @@ class AdminViewModel @Inject constructor(
                 val file = uriToFile(hotelDto.images!![0].originalImage.toUri(), context)
                 imageRepository.uploadImage(file)
             }
+        }
+    }
+    fun findAllUser(){
+        viewModelScope.launch {
+            _listUser.value=userRepository.findAll()
         }
     }
 }

@@ -86,4 +86,14 @@ class UserRepositoryImpl(
             throw Exception(errorBody ?: "Unknown error occurred")
         }
     }
+
+    override suspend fun findAll(): List<User> {
+        val response = userAPI.findAll()
+        return (if (response.isSuccessful) {
+            response.body()?: "successfully"
+        } else {
+            val errorBody = response.errorBody()?.string()
+            throw Exception(errorBody ?: "Unknown error occurred")
+        }) as List<User>
+    }
 }

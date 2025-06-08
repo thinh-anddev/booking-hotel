@@ -31,5 +31,6 @@ interface UserRepository {
     suspend fun sendOTP(
         user: User
     ): SendOTPResponse?
+    suspend fun findAll():List<User>
 
 }

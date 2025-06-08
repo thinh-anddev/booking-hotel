@@ -117,6 +117,11 @@ fun AdminScreen(
                     ,modifier=Modifier.height(60.dp)) {
                     navController.navigate(Route.AddHotelScreen.route)
                 }
+                Spacer(modifier = Modifier.height(5.dp))
+                ButtonFunction(functionName ="Xem danh sách khách hàng"
+                    ,modifier=Modifier.height(60.dp)) {
+                    navController.navigate(Route.UserListScreen.route)
+                }
             }
         }
     }

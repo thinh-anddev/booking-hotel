@@ -31,6 +31,9 @@ interface UserAPI {
     suspend fun getUserById(
         @Path("id") id: Long
     ): Response<GetUserResponse>
+    @GET("${Constant.AUTH}/${Constant.FIND_ALL}")
+    suspend fun findAll(
+    ): Response<List<User>>
 
     @PUT("${Constant.AUTH}/${Constant.UPDATE_USER}/{id}")
     suspend fun updateUser(

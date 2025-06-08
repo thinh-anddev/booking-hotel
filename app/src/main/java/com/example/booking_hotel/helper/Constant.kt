@@ -24,6 +24,7 @@ object Constant {
     const val CHANGE_PASSWORD = "changePassword"
     const val FORGOT_PASSWORD = "forgot-password"
     const val SEND_OTP = "send-otp"
+    const val FIND_ALL = "findAll"
     //order
     const val ORDER = "api/order"
     const val SAVE_ORDER = "saveOrder"
