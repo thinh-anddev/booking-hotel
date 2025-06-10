@@ -28,6 +28,7 @@ import com.example.booking_hotel.presentation.admin.AdminViewModel
 @Composable
 fun UserListScreen(
     navController: NavController,
+    navigateToUserDetail:(User)-> Unit,
     viewModel: AdminViewModel=hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
@@ -52,7 +53,7 @@ fun UserListScreen(
                 .padding(8.dp)
         ) {
             items(count=listUser.size) {
-                UserCard(user = listUser[it])
+                UserCard(user = listUser[it],navigateToUserDetail)
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }

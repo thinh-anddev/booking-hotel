@@ -66,4 +66,5 @@ sealed class Route(
             return "SearchScreen/$searchQuery/$checkInDate/$checkOutDate/$adult/$children"
         }
     }
+    data object UserDetailScreen:Route("UserDetailScreen")
 }

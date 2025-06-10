@@ -34,6 +34,7 @@ import com.example.booking_hotel.presentation.account.qrcode.QRCodeScreen
 import com.example.booking_hotel.presentation.admin.AddHotelScreen
 import com.example.booking_hotel.presentation.admin.AdminScreen
 import com.example.booking_hotel.presentation.admin.revenue.RevenueScreen
+import com.example.booking_hotel.presentation.admin.user.UserDetailScreen
 import com.example.booking_hotel.presentation.admin.user.UserListScreen
 import com.example.booking_hotel.presentation.confirm_order.ConfirmOrderScreen
 import com.example.booking_hotel.presentation.detail.DetailScreen
@@ -300,6 +301,12 @@ fun NavigatorScreen(
                         )
                     }
             }
+            composable(route=Route.UserDetailScreen.route){
+                navController.previousBackStackEntry?.savedStateHandle?.get<User?>(Constant.USER)?.let {
+                    user->
+                    UserDetailScreen(user=user)
+                }
+            }
             composable(
                 route = Route.ConfirmOrderScreen.route
             ) {
@@ -337,7 +344,9 @@ fun NavigatorScreen(
             composable(
                 route=Route.UserListScreen.route
             ) {
-                UserListScreen(navController=navController)
+                UserListScreen(navController=navController,navigateToUserDetail = {user->
+                    navigateToUserDetail(navController,user)
+                })
             }
         }
     }
@@ -375,4 +384,8 @@ private fun navigateToDetails(
             children = children
         )
     )
+}
+private fun navigateToUserDetail(navController: NavController,user:User){
+    navController.currentBackStackEntry?.savedStateHandle?.set(Constant.USER,user)
+    navController.navigate(route= Route.UserDetailScreen.route)
 }

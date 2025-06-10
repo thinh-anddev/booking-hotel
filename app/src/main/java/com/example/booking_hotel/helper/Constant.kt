@@ -4,6 +4,7 @@ object Constant {
     //emulator (check ipconfig)
     const val BASE_URL = "http://192.168.100.138:8081/"
     const val PROPERTY = "PROPERTY"
+    const val USER = "user"
 
     //search hotel
     const val API_GET_HOTEL = "api/hotels/search"

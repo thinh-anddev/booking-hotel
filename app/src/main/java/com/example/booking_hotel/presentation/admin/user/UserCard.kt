@@ -1,6 +1,7 @@
 package com.example.booking_hotel.presentation.admin.user
 
 import android.graphics.Color
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +14,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,16 +27,15 @@ import com.example.booking_hotel.helper.Constant
 import com.example.booking_hotel.ui.theme.Color_986601
 
 @Composable
-fun UserCard(user: User) {
+fun UserCard(user: User,onClick:(User)->Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(16.dp).clickable{onClick.invoke(user)}
         ) {
-            // Avatar
             AsyncImage(
                 model = "${Constant.BASE_URL}${user.avatar}",
                 contentDescription = "Avatar",
