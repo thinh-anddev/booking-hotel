@@ -4,6 +4,7 @@ import com.example.booking_hotel.data.remote.dto.ChangePasswordRequest
 import com.example.booking_hotel.data.remote.dto.GetUserResponse
 import com.example.booking_hotel.data.remote.dto.LoginResponse
 import com.example.booking_hotel.data.remote.dto.SendOTPResponse
+import com.example.booking_hotel.data.remote.dto.UpdateUserForAdminRequest
 import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.helper.Constant
@@ -53,4 +54,9 @@ interface UserAPI {
     suspend fun sendOtp(
         @Body user: User
     ): Response<SendOTPResponse>
+    @PUT("${Constant.AUTH}/${Constant.UPDATE_USER_FOR_ADMIN}/{id}")
+    suspend fun updateUserForAdmin(
+        @Path("id") id: Long,
+        @Body user: UpdateUserForAdminRequest
+    ): Response<String>
 }

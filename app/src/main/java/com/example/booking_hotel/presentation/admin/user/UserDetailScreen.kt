@@ -1,4 +1,8 @@
 package com.example.booking_hotel.presentation.admin.user
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,12 +26,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.helper.Constant
@@ -36,6 +42,7 @@ import com.example.booking_hotel.presentation.admin.AdminViewModel
 @Composable
 fun UserDetailScreen(
     user: User,
+    navController: NavController,
     viewModel: AdminViewModel= hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
@@ -43,7 +50,12 @@ fun UserDetailScreen(
     var password by remember { mutableStateOf(user.password) }
     var age by remember { mutableStateOf(user.age.toString()) }
     var avatarUrl by remember { mutableStateOf(user.avatar) }
-
+    val context = LocalContext.current
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        viewModel.onSelectedAvatar(uri!!.toString())
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -61,17 +73,9 @@ fun UserDetailScreen(
                 .align(Alignment.CenterHorizontally)
                 .clip(CircleShape)
                 .clickable {
-                    // Gợi ý: Mở picker để thay đổi avatarUrl
+                    imagePickerLauncher.launch("image/*")
                 },
             contentScale = ContentScale.Crop
-        )
-
-        OutlinedTextField(
-            value = avatarUrl,
-            onValueChange = { avatarUrl = it },
-            label = { Text("Avatar URL") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
@@ -110,6 +114,7 @@ fun UserDetailScreen(
                     age = age.toIntOrNull() ?: user.age,
                     avatar = avatarUrl
                 )
+                viewModel.updateUser(navController,context,updatedUser)
             },
             modifier = Modifier.align(Alignment.End)
         ) {

@@ -304,7 +304,7 @@ fun NavigatorScreen(
             composable(route=Route.UserDetailScreen.route){
                 navController.previousBackStackEntry?.savedStateHandle?.get<User?>(Constant.USER)?.let {
                     user->
-                    UserDetailScreen(user=user)
+                    UserDetailScreen(user=user,navController=navController)
                 }
             }
             composable(

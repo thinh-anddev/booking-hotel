@@ -21,8 +21,12 @@ import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 import androidx.core.net.toUri
+import androidx.navigation.NavController
+import com.example.booking_hotel.data.remote.dto.UpdateUserForAdminRequest
+import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.domain.repository.UserRepository
+import com.example.booking_hotel.presentation.navgraph.Route
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
@@ -41,6 +45,9 @@ class AdminViewModel @Inject constructor(
     val selectedRevenue: LiveData<RevenueResponse?> = _selectedRevenue
     private var _listUser=MutableLiveData<List<User>>(emptyList())
     val listUser:LiveData<List<User>> = _listUser
+
+    private var _avatar = MutableLiveData("")
+    val avatar: LiveData<String> = _avatar
     init {
         getAllHotel()
         getAllHotelStat()
@@ -95,6 +102,28 @@ class AdminViewModel @Inject constructor(
     fun findAllUser(){
         viewModelScope.launch {
             _listUser.value=userRepository.findAll()
+        }
+    }
+    fun onSelectedAvatar(url: String){
+        _avatar.value=url
+    }
+    fun updateUser(navController: NavController,context:Context,user: User) {
+        viewModelScope.launch {
+            val file = uriToFile(Uri.parse(_avatar.value) , context)
+            val result = imageRepository.uploadImage(file)
+            _avatar.value = result.url
+            val updateUserRequest = UpdateUserForAdminRequest(
+                contact = user.contact,
+                email = user.email,
+                avatar = _avatar.value!!,
+                userName = user.email,
+                password = user.password,
+                age=user.age
+            )
+            userRepository.updateUserForAdmin(user.id!!, updateUserRequest)
+            navController.navigate(Route.AdminScreen.route) {
+                popUpTo(0) { inclusive = false}
+            }
         }
     }
 }

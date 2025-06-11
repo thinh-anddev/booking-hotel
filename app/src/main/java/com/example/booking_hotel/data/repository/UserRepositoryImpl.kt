@@ -7,6 +7,7 @@ import com.example.booking_hotel.data.remote.dto.ChangePasswordRequest
 import com.example.booking_hotel.data.remote.dto.GetUserResponse
 import com.example.booking_hotel.data.remote.dto.LoginResponse
 import com.example.booking_hotel.data.remote.dto.SendOTPResponse
+import com.example.booking_hotel.data.remote.dto.UpdateUserForAdminRequest
 import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.domain.repository.UserRepository
@@ -95,5 +96,10 @@ class UserRepositoryImpl(
             val errorBody = response.errorBody()?.string()
             throw Exception(errorBody ?: "Unknown error occurred")
         }) as List<User>
+    }
+
+    override suspend fun updateUserForAdmin(id: Long, user: UpdateUserForAdminRequest): String {
+        val response = userAPI.updateUserForAdmin(id, user)
+        return response.message()
     }
 }

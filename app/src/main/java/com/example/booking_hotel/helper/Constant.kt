@@ -2,7 +2,7 @@ package com.example.booking_hotel.helper
 
 object Constant {
     //emulator (check ipconfig)
-    const val BASE_URL = "http://192.168.100.138:8081/"
+    const val BASE_URL = "http://192.168.102.9:8081/"
     const val PROPERTY = "PROPERTY"
     const val USER = "user"
 
@@ -22,6 +22,7 @@ object Constant {
     const val LOGIN = "login"
     const val GET_USER = "getUser"
     const val UPDATE_USER = "updateUser"
+    const val UPDATE_USER_FOR_ADMIN = "updateUserForAdmin"
     const val CHANGE_PASSWORD = "changePassword"
     const val FORGOT_PASSWORD = "forgot-password"
     const val SEND_OTP = "send-otp"

@@ -4,6 +4,7 @@ import com.example.booking_hotel.data.remote.dto.ChangePasswordRequest
 import com.example.booking_hotel.data.remote.dto.GetUserResponse
 import com.example.booking_hotel.data.remote.dto.LoginResponse
 import com.example.booking_hotel.data.remote.dto.SendOTPResponse
+import com.example.booking_hotel.data.remote.dto.UpdateUserForAdminRequest
 import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 
@@ -32,5 +33,8 @@ interface UserRepository {
         user: User
     ): SendOTPResponse?
     suspend fun findAll():List<User>
-
+    suspend fun updateUserForAdmin(
+        id: Long,
+        user: UpdateUserForAdminRequest
+    ): String
 }

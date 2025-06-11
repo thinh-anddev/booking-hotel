@@ -1,5 +1,7 @@
 package com.example.booking_hotel.domain.model
 
+import java.io.Serializable
+
 data class User(
     val id: Long?= null,
     val userName: String,
@@ -9,4 +11,4 @@ data class User(
     val age: Int,
     val avatar: String,
     val dateCreated: String
-)
+): Serializable
