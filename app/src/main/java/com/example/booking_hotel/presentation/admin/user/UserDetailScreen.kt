@@ -120,5 +120,13 @@ fun UserDetailScreen(
         ) {
             Text("Lưu thay đổi")
         }
+        Button(
+            onClick = {
+                viewModel.deleteUser(navController, context, user)
+            },
+            modifier = Modifier.align(Alignment.End)
+        ) {
+            Text("Xóa người dùng")
+        }
     }
 }

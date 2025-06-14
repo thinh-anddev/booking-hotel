@@ -37,4 +37,5 @@ interface UserRepository {
         id: Long,
         user: UpdateUserForAdminRequest
     ): String
+    suspend fun deleteUser(id: Long): String
 }

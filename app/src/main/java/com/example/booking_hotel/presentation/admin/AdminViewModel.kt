@@ -3,6 +3,7 @@ package com.example.booking_hotel.presentation.admin
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -123,6 +124,21 @@ class AdminViewModel @Inject constructor(
             userRepository.updateUserForAdmin(user.id!!, updateUserRequest)
             navController.navigate(Route.AdminScreen.route) {
                 popUpTo(0) { inclusive = false}
+            }
+        }
+    }
+    fun deleteUser(navController: NavController, context: Context, user: User) {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.deleteUser(user.id!!)
+                if (response=="User deleted successfully") {
+                    Toast.makeText(context, "Đã xóa người dùng", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
+                } else {
+                    Toast.makeText(context,"Lỗi xóa", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

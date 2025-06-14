@@ -102,4 +102,9 @@ class UserRepositoryImpl(
         val response = userAPI.updateUserForAdmin(id, user)
         return response.message()
     }
+
+    override suspend fun deleteUser(id: Long): String {
+        val response = userAPI.deleteUser(id)
+        return response.message()
+    }
 }
