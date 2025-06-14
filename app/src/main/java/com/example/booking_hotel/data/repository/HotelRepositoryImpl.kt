@@ -55,4 +55,8 @@ class HotelRepositoryImpl(
         val response = hotelAPI.createHotel(hotel)
         return response.body()!!
     }
+    override suspend fun deleteHotel(id: Long): String {
+        val response = hotelAPI.deleteHotel(id)
+        return response.message()
+    }
 }

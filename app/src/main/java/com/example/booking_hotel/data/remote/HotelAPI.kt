@@ -9,6 +9,7 @@ import com.example.booking_hotel.helper.Constant.AVGRATE
 import com.example.booking_hotel.helper.Constant.RATINGS
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -50,4 +51,8 @@ interface HotelAPI {
     ): Response<Hotel>
     @POST("${Constant.API_HOTEL}/add")
     suspend fun createHotel(@Body hotel: HotelDTO): Response<HotelDTO>
+    @DELETE("${Constant.API_HOTEL}/{id}")
+    suspend fun deleteHotel(
+        @Path("id") hotelId: Long
+    ): Response<String>
 }

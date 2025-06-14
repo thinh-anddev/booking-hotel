@@ -125,7 +125,7 @@ fun AdminScreen(
                 Spacer(modifier = Modifier.height(5.dp))
                 ButtonFunction(functionName ="Xem danh sách khách sạn"
                     ,modifier=Modifier.height(60.dp)) {
-                    navController.navigate(Route.UserListScreen.route)
+                    navController.navigate(Route.ManageHotelScreen.route)
                 }
             }
         }

@@ -94,4 +94,26 @@ class OrderRepositoryImpl(
             throw Exception(errorBody ?: "Unknown error occurred")
         }
     }
+
+    override suspend fun cancelOrder(orderId: Long): String {
+        val response = orderAPI.cancelOrder(orderId)
+        if (response.isSuccessful) {
+            val result = response.body()
+            return result ?: "successful"
+        } else {
+            val error = response.errorBody()?.string()
+            return error ?: "error"
+        }
+    }
+
+    override suspend fun successfullPayment(orderId: Long): String {
+        val response = orderAPI.successfullPayment(orderId)
+        if (response.isSuccessful) {
+            val result = response.body()
+            return result ?: "successful"
+        } else {
+            val error = response.errorBody()?.string()
+            return error ?: "error"
+        }
+    }
 }

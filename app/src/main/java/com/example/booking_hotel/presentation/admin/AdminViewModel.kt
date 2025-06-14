@@ -28,6 +28,8 @@ import com.example.booking_hotel.data.remote.dto.UpdateUserRequest
 import com.example.booking_hotel.domain.model.User
 import com.example.booking_hotel.domain.repository.UserRepository
 import com.example.booking_hotel.presentation.navgraph.Route
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
@@ -46,6 +48,8 @@ class AdminViewModel @Inject constructor(
     val selectedRevenue: LiveData<RevenueResponse?> = _selectedRevenue
     private var _listUser=MutableLiveData<List<User>>(emptyList())
     val listUser:LiveData<List<User>> = _listUser
+    private val _deleteStatus = MutableStateFlow<String?>(null)
+    val deleteStatus: StateFlow<String?> = _deleteStatus
 
     private var _avatar = MutableLiveData("")
     val avatar: LiveData<String> = _avatar
@@ -139,6 +143,20 @@ class AdminViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Toast.makeText(context, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    fun deleteHotelById(hotelId: Long) {
+        viewModelScope.launch {
+            try {
+                val response = hotelRepository.deleteHotel(hotelId)
+                if (response=="Xóa khách sạn thành công") {
+                    _deleteStatus.value = "Xoá thành công khách sạn ID: $hotelId"
+                } else {
+                    _deleteStatus.value = "Xoá thất bại: ${response}"
+                }
+            } catch (e: Exception) {
+                _deleteStatus.value = "Lỗi: ${e.message}"
             }
         }
     }

@@ -71,6 +71,23 @@ class OrderViewModel @Inject constructor(
             val response = orderRepository.updateOrderStatus(id, status)
         }
     }
+    fun deleteOrder(id: Long) {
+        viewModelScope.launch {
+            val result = orderRepository.cancelOrder(id)
+            if (result=="successfully") {
+                getListOrder()
+            }
+        }
+    }
+    fun successfulPayment(orderId: Long) {
+        viewModelScope.launch {
+            val result = orderRepository.successfullPayment(orderId)
+            if (result=="successfully") {
+                getListOrder()
+            }
+        }
+    }
+
     suspend fun getHotelById(id: Long): Hotel {
         return hotelRepository.getHotelById(id)
     }

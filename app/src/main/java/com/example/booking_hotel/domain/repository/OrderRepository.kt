@@ -16,4 +16,6 @@ interface OrderRepository {
     suspend fun getMonthlyRevenue(
         year:Int,hotelId:Long,month:Int
     ):RevenueResponse
+    suspend fun cancelOrder(orderId:Long): String
+    suspend fun successfullPayment(orderId:Long):String
 }

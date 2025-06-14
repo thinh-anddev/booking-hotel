@@ -43,4 +43,12 @@ interface OrderAPI {
         @Query("month") month:Int,
         @Query("year") year:Int
     ):Response<RevenueResponse>
+    @PUT("${Constant.ORDER}/cancelOrder/{orderId}")
+    suspend fun cancelOrder(
+        @Path("orderId") orderId: Long
+    ): Response<String>
+    @PUT("${Constant.ORDER}/successfullPayment/{orderId}")
+    suspend fun successfullPayment(
+        @Path("orderId") orderId: Long
+    ): Response<String>
 }

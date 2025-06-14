@@ -33,4 +33,5 @@ interface HotelRepository {
     ): Hotel
     suspend fun getAllHotel():List<Hotel>
     suspend fun createHotel(hotel: HotelDTO): HotelDTO
+    suspend fun deleteHotel(id:Long): String
 }

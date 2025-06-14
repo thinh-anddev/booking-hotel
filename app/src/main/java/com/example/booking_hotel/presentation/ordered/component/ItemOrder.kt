@@ -56,7 +56,8 @@ import com.example.booking_hotel.ui.theme.TextColor
 fun ItemOrder(
     order: Order,
     viewModel: OrderViewModel = hiltViewModel(),
-    onClick: (String) -> Unit,
+    onClick: (Order) -> Unit,
+    onDeleteClick: (Order) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var hotel by remember { mutableStateOf<Hotel?>(null) }
@@ -64,11 +65,6 @@ fun ItemOrder(
     val backgroundFunction by viewModel.backgroundColor.observeAsState()
     val context = LocalContext.current
     val animate = hotel?.amenities
-    val newStatus = when (order.orderStatus) {
-        Constant.PENDING -> Constant.PAID
-        Constant.PAID -> Constant.CANCELED
-        else -> ""
-    }
 
     LaunchedEffect(order.hotelId) {
         try {
@@ -78,10 +74,12 @@ fun ItemOrder(
             Log.e("ItemOrder", "Error fetching hotel: $e")
         }
     }
-    LaunchedEffect(key1 = order.orderStatus) {
+
+    LaunchedEffect(order.orderStatus) {
         viewModel.syncDataBackground(order.orderStatus)
         viewModel.syncDataStatus(order.orderStatus)
     }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -100,21 +98,25 @@ fun ItemOrder(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = hotel?.name ?: "", style = TextStyle(
+                    text = hotel?.name ?: "",
+                    style = TextStyle(
                         fontSize = 18.sp,
                         fontFamily = FontFamily(Font(R.font.lato_bold)),
                         color = Color_986601
                     )
                 )
                 Text(
-                    text = formatDate(order.dateCreated), style = TextStyle(
+                    text = formatDate(order.dateCreated),
+                    style = TextStyle(
                         color = Color.Black,
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(R.font.lato_regular))
                     )
                 )
             }
+
             Spacer(modifier = Modifier.height(30.dp))
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,52 +126,44 @@ fun ItemOrder(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data(if (hotel?.images != null) hotel!!.images?.get(0) else "")
+                        .data(hotel?.images?.getOrNull(0) ?: "")
                         .build(),
                     contentDescription = null,
                     modifier = Modifier
-                        .height(200.dp)
+                        .height(100.dp)
                         .width(135.dp)
                         .clip(RoundedCornerShape(4.dp))
                         .shadow(8.dp),
                     contentScale = ContentScale.Crop
                 )
+
                 Column(
                     modifier = Modifier
                         .padding(end = 20.dp)
                         .padding(start = 10.dp)
                 ) {
                     Row(
-                        modifier = Modifier
-
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.Top,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_bed),
-                                contentDescription = null
-                            )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(painter = painterResource(id = R.drawable.ic_bed), contentDescription = null)
                             Text(
-                                text = "1 giường", style = TextStyle(
+                                text = "1 giường",
+                                style = TextStyle(
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.lato_regular)),
                                     color = Color.Black
                                 )
                             )
                         }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_user),
-                                contentDescription = null
-                            )
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(painter = painterResource(id = R.drawable.ic_user), contentDescription = null)
                             Text(
-                                text = "${order.numberPeople} khách", style = TextStyle(
+                                text = "${order.numberPeople} khách",
+                                style = TextStyle(
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily(Font(R.font.lato_regular)),
                                     color = Color.Black
@@ -177,15 +171,20 @@ fun ItemOrder(
                             )
                         }
                     }
+
                     Spacer(modifier = Modifier.height(10.dp))
+
                     Text(
-                        text = "Tiện nghi", style = TextStyle(
+                        text = "Tiện nghi",
+                        style = TextStyle(
                             color = Color.Black,
                             fontFamily = FontFamily(Font(R.font.lato_bold)),
                             fontSize = 16.sp
                         )
                     )
+
                     Spacer(modifier = Modifier.height(10.dp))
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -193,7 +192,7 @@ fun ItemOrder(
                         verticalArrangement = Arrangement.spacedBy(5.dp)
                     ) {
                         items(count = 4) { index ->
-                            val ani = animate?.getOrElse(index) { listOf("", "") }
+                            val ani = animate?.getOrNull(index) ?: ""
                             Text(
                                 text = "- $ani",
                                 style = TextStyle(
@@ -203,47 +202,118 @@ fun ItemOrder(
                             )
                         }
                     }
+
                     Spacer(modifier = Modifier.height(12.dp))
+
                     Text(
-                        text = "Giá phòng", style = TextStyle(
+                        text = "Giá phòng",
+                        style = TextStyle(
                             color = Color.Black,
                             fontSize = 12.sp
-                        ), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
                     )
+
                     Spacer(modifier = Modifier.height(10.dp))
+
                     Text(
-                        text = "${order.totalPrice} đ", style = TextStyle(
+                        text = "${order.totalPrice} đ",
+                        style = TextStyle(
                             color = Color_986601,
                             fontSize = 18.sp,
                             fontFamily = FontFamily(Font(R.font.lato_bold))
-                        ), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.End
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
                     )
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
-        Box(
-            modifier = Modifier
-                .height(50.dp)
-                .width(150.dp)
-                .align(Alignment.End)
-                .background(backgroundFunction!!)
-                .clip(RoundedCornerShape(10.dp))
-                .clickable {
-                    onClick.invoke(newStatus)
-                },
-            contentAlignment = Alignment.Center
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
         ) {
-            Text(
-                text = nameFunction!!, style = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.lato_bold)),
-                    fontSize = 16.sp,
-                    color = Color.White
-                )
-            )
+            when (order.orderStatus) {
+                Constant.PENDING -> {
+                    // Nút hủy
+                    Box(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(100.dp)
+                            .background(Color.Red)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable { onDeleteClick(order) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Hủy",
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.lato_bold)),
+                                fontSize = 16.sp,
+                                color = Color.White
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    // Nút thanh toán
+                    Box(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(150.dp)
+                            .background(backgroundFunction ?: Color.Gray)
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable { onClick(order) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Thanh toán",
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.lato_bold)),
+                                fontSize = 16.sp,
+                                color = Color.White
+                            )
+                        )
+                    }
+                }
+
+                Constant.PAID -> {
+                    Text(
+                        text = "Đã thanh toán",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.lato_bold)),
+                            color = Color.Green
+                        ),
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+
+                Constant.CANCELED -> {
+                    Text(
+                        text = "Đã hủy",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.lato_bold)),
+                            color = Color.Red
+                        ),
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+            }
         }
     }
 }
+
 
 //@Preview(showBackground = true)
 //@Composable

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -78,12 +80,12 @@ fun ManageHotelScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
             ) {
-                listHotel.forEachIndexed { index, hotel ->
+                itemsIndexed(listHotel) { index, hotel ->
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -97,7 +99,7 @@ fun ManageHotelScreen(
                     ) {
                         Column {
                             Text(
-                                text = hotel.name!!,
+                                text = hotel.name ?: "",
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily(Font(R.font.lato_bold))
                             )
@@ -108,7 +110,7 @@ fun ManageHotelScreen(
                                     onDismissRequest = { expandedMenuIndex = -1 }
                                 ) {
                                     DropdownMenuItem(onClick = {
-//                                        viewModel.deleteHotel(hotel.id)
+                                        viewModel.deleteHotelById(hotel.id)
                                         expandedMenuIndex = -1
                                     }) {
                                         Text("🗑 Xóa khách sạn", color = Color.Red)
