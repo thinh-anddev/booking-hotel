@@ -61,10 +61,15 @@ class LoginViewModel @Inject constructor(
                 val loginResponse = userRepository.login(username, password)
                 if (loginResponse != null && loginResponse.message == "Logged in successfully") {
                     val userId = loginResponse.userId ?: return@launch
-                    sharedPreferencesHelper.saveUserId(userId)
-                    _errorMessage.value = "Đăng nhập thành công"
-                    navController.navigate(Route.NavigatorScreen.route) {
-                        popUpTo(0) { inclusive = true }
+                    val userRes = userRepository.getUserById(userId) ?:return@launch
+                    if(userRes.user?.role == "ADMIN"){
+                        navController.navigate(Route.AdminScreen.route){popUpTo(0) { inclusive = true }}
+                    }else{
+                        sharedPreferencesHelper.saveUserId(userId)
+                        _errorMessage.value = "Đăng nhập thành công"
+                        navController.navigate(Route.NavigatorScreen.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 } else {
                     _errorMessage.value = loginResponse!!.message
