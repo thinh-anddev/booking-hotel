@@ -33,6 +33,7 @@ import com.example.booking_hotel.presentation.account.contact.ContactScreen
 import com.example.booking_hotel.presentation.account.qrcode.QRCodeScreen
 import com.example.booking_hotel.presentation.admin.AddHotelScreen
 import com.example.booking_hotel.presentation.admin.AdminScreen
+import com.example.booking_hotel.presentation.admin.ManageHotelScreen
 import com.example.booking_hotel.presentation.admin.revenue.RevenueScreen
 import com.example.booking_hotel.presentation.admin.user.UserDetailScreen
 import com.example.booking_hotel.presentation.admin.user.UserListScreen
@@ -330,6 +331,11 @@ fun NavigatorScreen(
                 route=Route.AdminScreen.route
             ) {
                 AdminScreen(navController=navController)
+            }
+            composable(
+                route=Route.ManageHotelScreen.route
+            ) {
+                ManageHotelScreen(navController=navController)
             }
             composable(
                 route=Route.RevenueScreen.route
