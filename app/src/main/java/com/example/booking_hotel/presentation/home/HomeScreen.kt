@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.asFlow
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -90,6 +91,8 @@ fun HomeScreen(
     val children by viewModel.children
     val adult by viewModel.adult
     val avatarz by viewModel.avatar.observeAsState()
+
+    val listRecommendHotels = viewModel.recommendedHotels.collectAsLazyPagingItems()
 
     var showDialogCheckIn by remember { mutableStateOf(false) }
     var showDialogCheckOut by remember { mutableStateOf(false) }
@@ -286,7 +289,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(30.dp))
             Text(
                 modifier = Modifier.padding(start = 16.dp),
-                text = "Tìm kiếm nhiều nhất", style = TextStyle(
+                text = "Gợi ý khách sạn cho bạn", style = TextStyle(
                     color = TextColor,
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.lato_bold))
@@ -295,7 +298,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
             HotelSearchList(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                properties = viewModel.getListHotSearch().collectAsLazyPagingItems()
+                properties = listRecommendHotels
             )
             Spacer(modifier = Modifier.height(48.dp))
             Text(

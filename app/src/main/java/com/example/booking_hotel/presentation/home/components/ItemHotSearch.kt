@@ -1,5 +1,6 @@
 package com.example.booking_hotel.presentation.home.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,8 @@ fun ItemHotSearch(
     hotel: Hotel? = null
 ) {
     hotel?.let {
+        Log.d("ItemHotSearch", "🔍 Hiển thị khách sạn: ${it.name}, giá: ${it.ratePerNight?.lowest}")
+
         val context = LocalContext.current
         val images = it.images
         val ratePerNightX = it.ratePerNight

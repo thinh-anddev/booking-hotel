@@ -55,4 +55,10 @@ interface HotelAPI {
     suspend fun deleteHotel(
         @Path("id") hotelId: Long
     ): Response<String>
+    @GET("/api/recommend")
+    suspend fun getRecommendedHotels(
+        @Query("userId") userId: Long
+    ): List<Int>
+    @POST("/api/refresh-model")
+    suspend fun refreshRecommendationModel(): Map<String, String>
 }

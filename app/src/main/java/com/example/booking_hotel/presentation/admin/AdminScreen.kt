@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -43,8 +46,17 @@ fun AdminScreen(
     viewModel: AdminViewModel=hiltViewModel()
 ){
     val listTop10Hotel by viewModel.listTop10HotelStat.observeAsState()
-    val mostBook by viewModel.mostBookedHotel.observeAsState()
+
+    val scaffoldState = rememberScaffoldState()
+    val message by viewModel.refreshStatus.collectAsState()
+
+    LaunchedEffect(message) {
+        message?.let {
+            scaffoldState.snackbarHostState.showSnackbar(it)
+        }
+    }
     Scaffold(
+        scaffoldState = scaffoldState,
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
@@ -95,17 +107,9 @@ fun AdminScreen(
                             fontSize = 17.sp
                         )
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
                     HotelBookingBarChart(stats = listTop10Hotel?: emptyList())
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-//                Text(
-//                    text = "Khách sạn được đặt nhiều nhất là ${mostBook!!.hotel.name} với ${mostBook!!.totalOrder} lượt đặt trên nền tảng" ,
-//                    style = TextStyle(
-//                        color = Color.Black,
-//                        fontFamily = FontFamily(Font(R.font.lato_regular)),
-//                        fontSize = 17.sp
-//                    )
 //                )
                 Spacer(modifier = Modifier.height(15.dp))
                 ButtonFunction(functionName ="Xem thống kê doanh thu của khách sạn"
@@ -126,6 +130,11 @@ fun AdminScreen(
                 ButtonFunction(functionName ="Xem danh sách khách sạn"
                     ,modifier=Modifier.height(60.dp)) {
                     navController.navigate(Route.ManageHotelScreen.route)
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                ButtonFunction(functionName ="Cập nhat lai danh sách gợi ý"
+                    ,modifier=Modifier.height(60.dp)) {
+                    viewModel.refreshRecommendationModel()
                 }
             }
         }

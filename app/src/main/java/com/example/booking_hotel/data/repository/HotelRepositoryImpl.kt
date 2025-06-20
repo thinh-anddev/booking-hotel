@@ -59,4 +59,11 @@ class HotelRepositoryImpl(
         val response = hotelAPI.deleteHotel(id)
         return response.message()
     }
+    override suspend fun getRecommendedHotels(userId: Long): List<Int> {
+        return hotelAPI.getRecommendedHotels(userId)
+    }
+
+    override suspend fun refreshRecommendationModel(): Map<String, String> {
+        return hotelAPI.refreshRecommendationModel()
+    }
 }
