@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -43,8 +46,17 @@ fun AdminScreen(
     viewModel: AdminViewModel=hiltViewModel()
 ){
     val listTop10Hotel by viewModel.listTop10HotelStat.observeAsState()
-    val mostBook by viewModel.mostBookedHotel.observeAsState()
+
+    val scaffoldState = rememberScaffoldState()
+    val message by viewModel.refreshStatus.collectAsState()
+
+    LaunchedEffect(message) {
+        message?.let {
+            scaffoldState.snackbarHostState.showSnackbar(it)
+        }
+    }
     Scaffold(
+        scaffoldState = scaffoldState,
         modifier = modifier
             .fillMaxSize()
             .background(Color.White)
@@ -118,6 +130,11 @@ fun AdminScreen(
                 ButtonFunction(functionName ="Xem danh sách khách sạn"
                     ,modifier=Modifier.height(60.dp)) {
                     navController.navigate(Route.ManageHotelScreen.route)
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                ButtonFunction(functionName ="Cập nhat lai danh sách gợi ý"
+                    ,modifier=Modifier.height(60.dp)) {
+                    viewModel.refreshRecommendationModel()
                 }
             }
         }

@@ -38,6 +38,8 @@ class AdminViewModel @Inject constructor(
     private val imageRepository:ImageRepository,
     private val userRepository: UserRepository
 ):ViewModel() {
+    private val _refreshStatus = MutableStateFlow<String?>(null)
+    val refreshStatus: StateFlow<String?> = _refreshStatus
     private var _listTop10HotelStat=MutableLiveData<List<HotelStatDTO>>(emptyList())
     val listTop10HotelStat:LiveData<List<HotelStatDTO>> =_listTop10HotelStat
     private var _listHotel=MutableLiveData<List<Hotel>>(emptyList())
@@ -56,7 +58,6 @@ class AdminViewModel @Inject constructor(
     init {
         getAllHotel()
         getAllHotelStat()
-        //getMostBookHotel()
         findAllUser()
     }
     private fun getAllHotelStat() {
@@ -69,6 +70,19 @@ class AdminViewModel @Inject constructor(
                 }
             }
             _listTop10HotelStat.value = fullStats
+        }
+    }
+    fun refreshRecommendationModel() {
+        viewModelScope.launch {
+            try {
+                val result = hotelRepository.refreshRecommendationModel()
+                val message = result["message"] ?: "Không rõ phản hồi"
+                Log.d("RECOMMEND_REFRESH", "✅ $message")
+                _refreshStatus.value = message
+            } catch (e: Exception) {
+                Log.e("RECOMMEND_REFRESH", "❌ Lỗi: ${e.message}")
+                _refreshStatus.value = "Lỗi: ${e.message}"
+            }
         }
     }
     private fun getAllHotel(){
