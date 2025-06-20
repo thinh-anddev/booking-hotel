@@ -95,17 +95,9 @@ fun AdminScreen(
                             fontSize = 17.sp
                         )
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
                     HotelBookingBarChart(stats = listTop10Hotel?: emptyList())
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-//                Text(
-//                    text = "Khách sạn được đặt nhiều nhất là ${mostBook!!.hotel.name} với ${mostBook!!.totalOrder} lượt đặt trên nền tảng" ,
-//                    style = TextStyle(
-//                        color = Color.Black,
-//                        fontFamily = FontFamily(Font(R.font.lato_regular)),
-//                        fontSize = 17.sp
-//                    )
 //                )
                 Spacer(modifier = Modifier.height(15.dp))
                 ButtonFunction(functionName ="Xem thống kê doanh thu của khách sạn"

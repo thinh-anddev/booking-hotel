@@ -11,6 +11,8 @@ import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.sp
 import com.example.booking_hotel.presentation.admin.HotelStatDTO
 import com.patrykandpatrick.vico.compose.component.lineComponent
 import com.patrykandpatrick.vico.compose.component.marker.markerComponent
@@ -29,7 +31,6 @@ fun HotelBookingBarChart(
         ChartEntryModelProducer(chartEntries)
     }
 
-    // Tạo marker hiển thị thông tin khi chạm vào cột
     val marker = markerComponent(
         label = textComponent(),
         indicator = shapeComponent(Shapes.pillShape, Color.Red),
@@ -41,9 +42,14 @@ fun HotelBookingBarChart(
         chartModelProducer = modelProducer,
         startAxis = rememberStartAxis(),
         bottomAxis = rememberBottomAxis(
+            label = textComponent(
+                color = Color.Black,
+                textSize = 10.sp
+            ),
             valueFormatter = { x, _ ->
                 stats.getOrNull(x.toInt())?.hotel?.name ?: ""
-            }
+            },
+            labelRotationDegrees = 45f
         ),
         marker = marker,
         modifier = modifier

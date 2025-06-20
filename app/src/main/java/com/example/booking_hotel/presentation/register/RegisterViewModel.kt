@@ -109,7 +109,7 @@ class RegisterViewModel @Inject constructor(
                     age = 30,
                     avatar = "",
                     dateCreated = "",
-                    role=""
+                    role="USER"
                 )
                 val gson = Gson()
                 val jsonUser = gson.toJson(user)

@@ -10,10 +10,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.example.booking_hotel.data.remote.RecommendedHotelPagingSource
 import com.example.booking_hotel.domain.model.Hotel
+import com.example.booking_hotel.domain.repository.HotelRepository
 import com.example.booking_hotel.domain.repository.UserRepository
 import com.example.booking_hotel.domain.usecase.SearchHotelUsecase
 import com.example.booking_hotel.helper.Constant
@@ -23,21 +27,26 @@ import com.example.booking_hotel.helper.dateToString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import kotlinx.coroutines.flow.flow
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val searchHotelUsecase: SearchHotelUsecase,
     private val userRepository: UserRepository,
+    private val hotelRepository: HotelRepository,
     private val sharedPreferencesHelper: SharedPreferencesHelper
 ): ViewModel() {
-
+    private val _recommendedHotels = MutableStateFlow<PagingData<Hotel>>(PagingData.empty())
+    val recommendedHotels: StateFlow<PagingData<Hotel>> = _recommendedHotels
     private val _searchQuery = mutableStateOf("")
     var searchQuery: State<String> = _searchQuery
 
@@ -70,6 +79,7 @@ class HomeViewModel @Inject constructor(
                 if (getUserResponse!!.message == "User found") {
                     val user = getUserResponse!!.user
                     _avatar.postValue("${Constant.BASE_URL}${user!!.avatar}")
+                    fetchRecommendedHotels(userId)
                 } else {
                     _avatar.postValue("")
                 }
@@ -133,18 +143,27 @@ class HomeViewModel @Inject constructor(
              }
         }
     }
+    fun fetchRecommendedHotels(userId: Long) {
+        viewModelScope.launch {
+            try {
+                val ids = hotelRepository.getRecommendedHotels(userId)
+                Log.d("RECOMMEND", "✅ Danh sách ID gợi ý: $ids")
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getListHotSearch(): Flow<PagingData<Hotel>> {
-        var properties: Flow<PagingData<Hotel>>? = null
-        try {
-            properties = searchHotelUsecase.invoke(
-                query = "quang ngai"
-            ).cachedIn(viewModelScope)
-            Log.d("API_TEST", "Response: $properties")
-        } catch (e: Exception) {
-            Log.e("API_TEST", "Error: ${e.message}")
+                Pager(
+                    config = PagingConfig(pageSize = 5),
+                    pagingSourceFactory = {
+                        RecommendedHotelPagingSource(
+                            hotelRepository = hotelRepository,
+                            recommendedIds = ids
+                        )
+                    }
+                ).flow.cachedIn(viewModelScope).collect {
+                    _recommendedHotels.value = it
+                }
+
+            } catch (e: Exception) {
+                Log.e("RECOMMEND", "❌ Lỗi khi gọi gợi ý: ${e.message}")
+            }
         }
-        return properties!!
     }
 }

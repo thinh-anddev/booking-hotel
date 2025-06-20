@@ -135,12 +135,8 @@ class AdminViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response = userRepository.deleteUser(user.id!!)
-                if (response=="User deleted successfully") {
-                    Toast.makeText(context, "Đã xóa người dùng", Toast.LENGTH_SHORT).show()
-                    navController.popBackStack()
-                } else {
-                    Toast.makeText(context,"Lỗi xóa", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(context, "Đã xóa người dùng", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
             } catch (e: Exception) {
                 Toast.makeText(context, "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
             }
